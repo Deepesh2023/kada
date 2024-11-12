@@ -4,7 +4,7 @@ export default function App() {
   return (
     <div class="container">
       <Navigation />
-      <div class="content"></div>
+      <Page />
     </div>
   );
 }
@@ -31,5 +31,13 @@ function Navigation() {
         <a href="">Settings</a>
       </div>
     </nav>
+  );
+}
+
+function Page() {
+  return (
+    <div>
+      <h1>Kada</h1>
+    </div>
   );
 }

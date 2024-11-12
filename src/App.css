@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -10,7 +11,21 @@
 }
 
 .navbar {
+  padding: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 4px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
