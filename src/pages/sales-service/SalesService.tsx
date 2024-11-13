@@ -14,7 +14,7 @@ function AddNewButtonStack() {
     createSignal<boolean>(false);
 
   return (
-    <div>
+    <div class="add-new-button-stack">
       <Show when={isAddNewButtonClicked()}>
         <button>Sale</button>
         <button>Service</button>
