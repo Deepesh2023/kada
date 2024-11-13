@@ -1,5 +1,6 @@
 import { createEffect, createSignal, Show } from "solid-js";
 import "./salesService.css";
+import { Accessor, Setter } from "solid-js/types/server/reactive.js";
 
 export default function SalesService() {
   const [showNewSaleDialog, setShowNewSaleDialog] = createSignal(false);
@@ -25,7 +26,13 @@ export default function SalesService() {
   );
 }
 
-function AddNewButtonStack({ setShowNewSaleDialog, setShowNewServiceDialog }) {
+function AddNewButtonStack({
+  setShowNewSaleDialog,
+  setShowNewServiceDialog,
+}: {
+  setShowNewSaleDialog: Setter<boolean>;
+  setShowNewServiceDialog: Setter<boolean>;
+}) {
   const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
     createSignal<boolean>(false);
 
@@ -33,7 +40,7 @@ function AddNewButtonStack({ setShowNewSaleDialog, setShowNewServiceDialog }) {
     <div class="add-new-button-stack">
       <Show when={isAddNewButtonClicked()}>
         <button onclick={() => setShowNewSaleDialog(true)}>Sale</button>
-        <button onclick={() => setShowNewSaleDialog(true)}>Service</button>
+        <button onclick={() => setShowNewServiceDialog(true)}>Service</button>
       </Show>
       <button
         onclick={() => setIsAddNewButtonClicked(!isAddNewButtonClicked())}
@@ -44,8 +51,14 @@ function AddNewButtonStack({ setShowNewSaleDialog, setShowNewServiceDialog }) {
   );
 }
 
-function NewSaleDialogBox({ showNewSaleDialog, setShowNewSaleDialog }) {
-  let dialog;
+function NewSaleDialogBox({
+  showNewSaleDialog,
+  setShowNewSaleDialog,
+}: {
+  showNewSaleDialog: Accessor<boolean>;
+  setShowNewSaleDialog: Setter<boolean>;
+}) {
+  let dialog: HTMLDialogElement | undefined;
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && showNewSaleDialog()) {
@@ -62,8 +75,14 @@ function NewSaleDialogBox({ showNewSaleDialog, setShowNewSaleDialog }) {
   return <dialog ref={dialog}>hello</dialog>;
 }
 
-function NewServieDialogBox({ showNewServiceDialog, setShowNewServiceDialog }) {
-  let dialog;
+function NewServieDialogBox({
+  showNewServiceDialog,
+  setShowNewServiceDialog,
+}: {
+  showNewServiceDialog: Accessor<boolean>;
+  setShowNewServiceDialog: Setter<boolean>;
+}) {
+  let dialog: HTMLDialogElement | undefined;
 
   document.addEventListener("keydown", (e) => {
     if (
