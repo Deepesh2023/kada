@@ -1,10 +1,10 @@
 import { Route, Router } from "@solidjs/router";
 
-import SalesService from "../pages/SalesService";
-import ManageStocks from "../pages/ManageStocks";
-import History from "../pages/History";
-import Stats from "../pages/Stats";
-import Settings from "../pages/Settings";
+import SalesService from "../../pages/SalesService";
+import ManageStocks from "../../pages/ManageStocks";
+import History from "../../pages/History";
+import Stats from "../../pages/Stats";
+import Settings from "../../pages/Settings";
 
 export default function CurrentPage() {
   return (
