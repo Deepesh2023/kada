@@ -7,7 +7,15 @@ export default function SalesService() {
 
   return (
     <div class="sales-service-page">
-      <NewSaleDialogBox showNewSaleDialog={showNewSaleDialog} />
+      <NewSaleDialogBox
+        showNewSaleDialog={showNewSaleDialog}
+        setShowNewSaleDialog={setShowNewSaleDialog}
+      />
+
+      <NewServieDialogBox
+        showNewServiceDialog={showNewServiceDialog}
+        setShowNewServiceDialog={setShowNewServiceDialog}
+      />
 
       <AddNewButtonStack
         setShowNewSaleDialog={setShowNewSaleDialog}
@@ -36,8 +44,14 @@ function AddNewButtonStack({ setShowNewSaleDialog, setShowNewServiceDialog }) {
   );
 }
 
-function NewSaleDialogBox({ showNewSaleDialog }) {
+function NewSaleDialogBox({ showNewSaleDialog, setShowNewSaleDialog }) {
   let dialog;
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && showNewSaleDialog()) {
+      setShowNewSaleDialog(false);
+    }
+  });
 
   createEffect(() => {
     if (showNewSaleDialog() && dialog) {
@@ -48,6 +62,23 @@ function NewSaleDialogBox({ showNewSaleDialog }) {
   return <dialog ref={dialog}>hello</dialog>;
 }
 
-function NewServieDialogBox({ showNewServiceDialog }) {
-  return <dialog>hello</dialog>;
+function NewServieDialogBox({ showNewServiceDialog, setShowNewServiceDialog }) {
+  let dialog;
+
+  document.addEventListener("keydown", (e) => {
+    if (
+      (e.key === "Escape" && showNewServiceDialog()) ||
+      showNewServiceDialog()
+    ) {
+      setShowNewServiceDialog(false);
+    }
+  });
+
+  createEffect(() => {
+    if (showNewServiceDialog() && dialog) {
+      dialog.showModal();
+    }
+  });
+
+  return <dialog ref={dialog}>hello</dialog>;
 }
