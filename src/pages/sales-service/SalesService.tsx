@@ -7,10 +7,12 @@ import {
   Show,
   createEffect,
 } from "solid-js";
+
 import "./salesService.css";
 
 export default function SalesService() {
   const [addNewSaleClicked, setAddNewSaleClicked] = createSignal(false);
+  const [addNewServiceClicked, setAddNewServiceClicked] = createSignal(false);
 
   return (
     <div class="sales-service-page">
@@ -18,12 +20,21 @@ export default function SalesService() {
         isDialogVisible={addNewSaleClicked}
         setDialogVisiblity={setAddNewSaleClicked}
       >
-        <h1>hello</h1>
+        <h1>Sale</h1>
+      </DialogBox>
+
+      <DialogBox
+        isDialogVisible={addNewServiceClicked}
+        setDialogVisiblity={setAddNewServiceClicked}
+      >
+        <h1>Service</h1>
       </DialogBox>
 
       <AddNewButtonStack
         addNewSaleClicked={addNewSaleClicked}
         setAddNewSaleClicked={setAddNewSaleClicked}
+        addNewServiceClicked={addNewServiceClicked}
+        setAddNewServiceClicked={setAddNewServiceClicked}
       />
     </div>
   );
@@ -32,15 +43,26 @@ export default function SalesService() {
 function AddNewButtonStack(props: {
   addNewSaleClicked: Accessor<boolean>;
   setAddNewSaleClicked: Setter<boolean>;
+  addNewServiceClicked: Accessor<boolean>;
+  setAddNewServiceClicked: Setter<boolean>;
 }) {
   const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
     createSignal<boolean>(false);
+
+  createEffect(() => {
+    if (props.addNewSaleClicked() || props.addNewServiceClicked()) {
+      console.log("hello");
+      setIsAddNewButtonClicked(false);
+    }
+  });
 
   return (
     <div class="add-new-button-stack">
       <Show when={isAddNewButtonClicked()}>
         <button onclick={() => props.setAddNewSaleClicked(true)}>Sale</button>
-        <button>Service</button>
+        <button onClick={() => props.setAddNewServiceClicked(true)}>
+          Service
+        </button>
       </Show>
       <button
         onclick={() => setIsAddNewButtonClicked(!isAddNewButtonClicked())}
