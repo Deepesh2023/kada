@@ -1,13 +1,9 @@
-import { Accessor, Setter, createSignal, createEffect, Show } from "solid-js";
+import { createSignal, createEffect, Show } from "solid-js";
 
+import { AddNewButtonStackTypes } from "../../types";
 import "./addNewButtonStack.css";
 
-export default function AddNewButtonStack(props: {
-  addNewSaleClicked: Accessor<boolean>;
-  setAddNewSaleClicked: Setter<boolean>;
-  addNewServiceClicked: Accessor<boolean>;
-  setAddNewServiceClicked: Setter<boolean>;
-}) {
+export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
   const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
     createSignal<boolean>(false);
 

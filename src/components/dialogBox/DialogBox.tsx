@@ -1,12 +1,9 @@
-import { Accessor, Setter, createEffect, JSX, children } from "solid-js";
+import { createEffect, children } from "solid-js";
 
+import { DialogBoxTypes } from "../../types";
 import "./dialogBox.css";
 
-export default function DialogBox(props: {
-  isDialogVisible: Accessor<boolean>;
-  setDialogVisiblity: Setter<boolean>;
-  children: JSX.Element;
-}) {
+export default function DialogBox(props: DialogBoxTypes) {
   let dialog: HTMLDialogElement | undefined;
   const form = children(() => props.children);
 
