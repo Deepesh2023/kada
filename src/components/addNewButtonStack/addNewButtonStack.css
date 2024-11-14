@@ -1,0 +1,10 @@
+.add-new-button-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+}

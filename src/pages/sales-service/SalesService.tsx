@@ -1,14 +1,9 @@
-import {
-  Accessor,
-  Setter,
-  children,
-  createSignal,
-  JSX,
-  Show,
-  createEffect,
-} from "solid-js";
+import { createSignal } from "solid-js";
 
 import "./salesService.css";
+
+import AddNewButtonStack from "../../components/addNewButtonStack/AddNewButtonStack";
+import DialogBox from "../../components/dialogBox/DialogBox";
 
 export default function SalesService() {
   const [addNewSaleClicked, setAddNewSaleClicked] = createSignal(false);
@@ -38,61 +33,4 @@ export default function SalesService() {
       />
     </div>
   );
-}
-
-function AddNewButtonStack(props: {
-  addNewSaleClicked: Accessor<boolean>;
-  setAddNewSaleClicked: Setter<boolean>;
-  addNewServiceClicked: Accessor<boolean>;
-  setAddNewServiceClicked: Setter<boolean>;
-}) {
-  const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
-    createSignal<boolean>(false);
-
-  createEffect(() => {
-    if (props.addNewSaleClicked() || props.addNewServiceClicked()) {
-      console.log("hello");
-      setIsAddNewButtonClicked(false);
-    }
-  });
-
-  return (
-    <div class="add-new-button-stack">
-      <Show when={isAddNewButtonClicked()}>
-        <button onclick={() => props.setAddNewSaleClicked(true)}>Sale</button>
-        <button onClick={() => props.setAddNewServiceClicked(true)}>
-          Service
-        </button>
-      </Show>
-      <button
-        onclick={() => setIsAddNewButtonClicked(!isAddNewButtonClicked())}
-      >
-        {isAddNewButtonClicked() ? "close" : "Add"}
-      </button>
-    </div>
-  );
-}
-
-function DialogBox(props: {
-  isDialogVisible: Accessor<boolean>;
-  setDialogVisiblity: Setter<boolean>;
-  children: JSX.Element;
-}) {
-  let dialog: HTMLDialogElement | undefined;
-  const form = children(() => props.children);
-
-  createEffect(() => {
-    if (props.isDialogVisible()) {
-      dialog?.showModal();
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      dialog?.close();
-      props.setDialogVisiblity(false);
-    }
-  });
-
-  return <dialog ref={(el) => (dialog = el)}>{form()}</dialog>;
 }
