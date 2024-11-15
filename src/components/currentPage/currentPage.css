@@ -7,6 +7,12 @@
   position: fixed;
   top: 0;
   left: 0;
+
+  display: flex;
+}
+
+#menu-close {
+  height: 20px;
 }
 
 @media screen and (width > 500px) {

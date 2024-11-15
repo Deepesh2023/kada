@@ -1,5 +1,5 @@
 import { Route, Router } from "@solidjs/router";
-import { createSignal, Show } from "solid-js";
+import { createSignal, Setter, Show } from "solid-js";
 
 import "./currentPage.css";
 
@@ -21,7 +21,7 @@ export default function CurrentPage() {
       <h1>Kada</h1>
 
       <Show when={isMenuVisible()}>
-        <MenuBar />
+        <MenuBar setMenuVisibility={setMenuVisibility} />
       </Show>
 
       <Router>
@@ -35,10 +35,13 @@ export default function CurrentPage() {
   );
 }
 
-function MenuBar() {
+function MenuBar(props: { setMenuVisibility: Setter<boolean> }) {
   return (
     <div class="menu-bar">
       <Navbar />
+      <button id="menu-close" onclick={() => props.setMenuVisibility(false)}>
+        close
+      </button>
     </div>
   );
 }
