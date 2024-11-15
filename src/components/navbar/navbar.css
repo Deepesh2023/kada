@@ -1,4 +1,5 @@
 .navbar {
+  height: 100vh;
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -11,4 +12,10 @@ ul {
 
 li {
   padding: 4px;
+}
+
+@media screen and (width <= 500px) {
+  .navbar {
+    display: none;
+  }
 }

@@ -12,6 +12,7 @@ export default function CurrentPage() {
   return (
     <div class="current-page">
       <h1>Kada</h1>
+
       <Router>
         <Route path={"/sales-service"} component={SalesService} />
         <Route path={"/manage-stocks"} component={ManageStocks} />
