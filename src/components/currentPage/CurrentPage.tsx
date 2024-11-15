@@ -11,6 +11,7 @@ import Settings from "../../pages/Settings";
 export default function CurrentPage() {
   return (
     <div class="current-page">
+      <button id="menu">Menu</button>
       <h1>Kada</h1>
 
       <Router>
