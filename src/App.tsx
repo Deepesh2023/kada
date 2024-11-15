@@ -6,7 +6,10 @@ import CurrentPage from "./components/currentPage/CurrentPage";
 export default function App() {
   return (
     <div class="container">
-      <Navbar />
+      <div class="navbar-container">
+        <Navbar />
+      </div>
+      
       <CurrentPage />
     </div>
   );

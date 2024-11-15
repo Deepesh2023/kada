@@ -2,6 +2,13 @@
   padding: 8px;
 }
 
+.menu-bar {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
 @media screen and (width > 500px) {
   #menu {
     display: none;

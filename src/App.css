@@ -14,3 +14,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+@media screen and (width <= 500px) {
+  .navbar-container {
+    display: none;
+  }
+}
