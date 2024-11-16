@@ -1,21 +1,41 @@
+import { Index } from "solid-js";
 import "./navbar.css";
+
+interface NavbarItems {
+  name: string;
+  link: string;
+}
+
+const navbarItems: NavbarItems[] = [
+  {
+    name: "Sales/Service",
+    link: "/sales-service",
+  },
+  {
+    name: "Manage stocks",
+    link: "/manage-stocks",
+  },
+  {
+    name: "history",
+    link: "/history",
+  },
+  {
+    name: "Stats",
+    link: "/stats",
+  },
+];
 
 export default function Navbar() {
   return (
     <nav class="navbar">
       <ul>
-        <li>
-          <a href="/sales-service">Sales/service</a>
-        </li>
-        <li>
-          <a href="/manage-stocks">Manage stocks</a>
-        </li>
-        <li>
-          <a href="/history">History</a>
-        </li>
-        <li>
-          <a href="/stats">Stats</a>
-        </li>
+        <Index each={navbarItems}>
+          {(navbarItem) => (
+            <li>
+              <a href={navbarItem().link}>{navbarItem().name}</a>
+            </li>
+          )}
+        </Index>
       </ul>
 
       <div>
