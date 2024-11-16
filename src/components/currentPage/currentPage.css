@@ -1,10 +1,20 @@
 .current-page {
   padding: 8px;
   height: 100%;
+  display: grid;
+  grid-template-rows: 0.25fr 3fr;
+}
+
+.header {
+  /* border: 1px solid black; */
+  display: flex;
+  position: fixed;
+
+  /* position: fixed; */
 }
 
 .route-group {
-  height: 100%;
+  /* border: 1px solid black; */
 }
 
 @media screen and (width > 500px) {

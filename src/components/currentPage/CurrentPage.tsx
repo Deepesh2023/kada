@@ -22,10 +22,12 @@ export default function CurrentPage() {
 
   return (
     <div class="current-page" ref={(el) => (routeGroup = el)}>
-      <button id="menu" onclick={() => setMenuVisibility(true)}>
-        Menu
-      </button>
-      <h1>Kada</h1>
+      <div class="header">
+        <button id="menu" onclick={() => setMenuVisibility(true)}>
+          Menu
+        </button>
+        <h1>Kada</h1>
+      </div>
 
       <Show when={isMenuVisible()}>
         <MenuBar setMenuVisibility={setMenuVisibility} />
