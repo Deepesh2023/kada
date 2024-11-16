@@ -12,10 +12,21 @@ import MenuBar from "../menuBar/MenuBar";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
+
+  let header: undefined | HTMLDivElement;
   let routeGroup: undefined | HTMLDivElement;
+  let menuButton: undefined | HTMLButtonElement;
 
   createEffect(() => {
+    if (!menuButton?.checkVisibility()) {
+      return;
+    }
+
     routeGroup?.addEventListener("click", () => {
+      setMenuVisibility(false);
+    });
+
+    header?.addEventListener("click", () => {
       setMenuVisibility(false);
     });
   });
@@ -23,8 +34,12 @@ export default function CurrentPage() {
   return (
     <div class="current-page" ref={(el) => (routeGroup = el)}>
       <div class="spacer">
-        <div class="header">
-          <button id="menu" onclick={() => setMenuVisibility(true)}>
+        <div class="header" ref={(el) => (header = el)}>
+          <button
+            id="menu"
+            onclick={() => setMenuVisibility(true)}
+            ref={(el) => (menuButton = el)}
+          >
             Menu
           </button>
           <h1>Kada</h1>
