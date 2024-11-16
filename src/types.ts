@@ -12,3 +12,8 @@ export interface AddNewButtonStackTypes {
   addNewServiceClicked: Accessor<boolean>;
   setAddNewServiceClicked: Setter<boolean>;
 }
+
+export interface NavbarItems {
+  name: string;
+  link: string;
+}

@@ -1,10 +1,8 @@
 import { Index } from "solid-js";
-import "./navbar.css";
 
-interface NavbarItems {
-  name: string;
-  link: string;
-}
+import { NavbarItems } from "../../types";
+
+import "./navbar.css";
 
 const navbarItems: NavbarItems[] = [
   {

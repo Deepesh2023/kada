@@ -1,5 +1,5 @@
 import { Route, Router } from "@solidjs/router";
-import { createSignal, Show } from "solid-js";
+import { createEffect, createSignal, Show } from "solid-js";
 
 import "./currentPage.css";
 
@@ -12,9 +12,17 @@ import MenuBar from "../menuBar/MenuBar";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
+  let currentPage: undefined | HTMLDivElement;
+
+  createEffect(() => {
+    currentPage?.addEventListener("click", () => {
+      console.log("hello");
+      setMenuVisibility(false);
+    });
+  });
 
   return (
-    <div class="current-page">
+    <div class="current-page" ref={(el) => (currentPage = el)}>
       <button id="menu" onclick={() => setMenuVisibility(true)}>
         Menu
       </button>
