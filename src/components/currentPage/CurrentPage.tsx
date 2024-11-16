@@ -12,16 +12,16 @@ import MenuBar from "../menuBar/MenuBar";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
-  let currentPage: undefined | HTMLDivElement;
+  let routeGroup: undefined | HTMLDivElement;
 
   createEffect(() => {
-    currentPage?.addEventListener("click", () => {
+    routeGroup?.addEventListener("click", () => {
       setMenuVisibility(false);
     });
   });
 
   return (
-    <div class="current-page" ref={(el) => (currentPage = el)}>
+    <div class="current-page" ref={(el) => (routeGroup = el)}>
       <button id="menu" onclick={() => setMenuVisibility(true)}>
         Menu
       </button>
@@ -31,13 +31,15 @@ export default function CurrentPage() {
         <MenuBar setMenuVisibility={setMenuVisibility} />
       </Show>
 
-      <Router>
-        <Route path={"/sales-service"} component={SalesService} />
-        <Route path={"/manage-stocks"} component={ManageStocks} />
-        <Route path={"/history"} component={History} />
-        <Route path={"/stats"} component={Stats} />
-        <Route path={"/settings"} component={Settings} />
-      </Router>
+      <div class="route-group" ref={(el) => (routeGroup = el)}>
+        <Router>
+          <Route path={"/sales-service"} component={SalesService} />
+          <Route path={"/manage-stocks"} component={ManageStocks} />
+          <Route path={"/history"} component={History} />
+          <Route path={"/stats"} component={Stats} />
+          <Route path={"/settings"} component={Settings} />
+        </Router>
+      </div>
     </div>
   );
 }

@@ -3,6 +3,10 @@
   height: 100%;
 }
 
+.route-group {
+  height: 100%;
+}
+
 @media screen and (width > 500px) {
   #menu {
     display: none;
