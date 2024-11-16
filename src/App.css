@@ -6,8 +6,10 @@
 
 .container {
   height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+}
+
+.navbar-container {
+  display: none;
 }
 
 a {
@@ -15,8 +17,13 @@ a {
   color: inherit;
 }
 
-@media screen and (width <= 500px) {
+@media screen and (width > 500px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+  }
+
   .navbar-container {
-    display: none;
+    display: block;
   }
 }

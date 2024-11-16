@@ -16,7 +16,6 @@ export default function CurrentPage() {
 
   createEffect(() => {
     currentPage?.addEventListener("click", () => {
-      console.log("hello");
       setMenuVisibility(false);
     });
   });
