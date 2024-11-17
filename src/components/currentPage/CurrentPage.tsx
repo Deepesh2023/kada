@@ -1,5 +1,5 @@
 import { Route, Router } from "@solidjs/router";
-import { createEffect, createSignal, Show } from "solid-js";
+import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 
 import "./currentPage.css";
 
@@ -9,37 +9,30 @@ import History from "../../pages/History";
 import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
 import MenuBar from "../menuBar/MenuBar";
+import { navbar } from "../navbar/Navbar";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
 
-  let header: undefined | HTMLDivElement;
-  let routeGroup: undefined | HTMLDivElement;
-  let menuButton: undefined | HTMLButtonElement;
+  function eventHandler(e: MouseEvent) {
+    if (e.target !== navbar) {
+      setMenuVisibility(false);
+    }
+  }
 
   createEffect(() => {
-    if (!menuButton?.checkVisibility()) {
-      return;
+    if (isMenuVisible()) {
+      document.addEventListener("click", eventHandler);
     }
 
-    routeGroup?.addEventListener("click", () => {
-      setMenuVisibility(false);
-    });
-
-    header?.addEventListener("click", () => {
-      setMenuVisibility(false);
-    });
+    onCleanup(() => document.removeEventListener("click", eventHandler));
   });
 
   return (
-    <div class="current-page" ref={(el) => (routeGroup = el)}>
+    <div class="current-page">
       <div class="spacer">
-        <div class="header" ref={(el) => (header = el)}>
-          <button
-            id="menu"
-            onclick={() => setMenuVisibility(true)}
-            ref={(el) => (menuButton = el)}
-          >
+        <div class="header">
+          <button id="menu" onclick={() => setMenuVisibility(true)}>
             Menu
           </button>
           <h1>Kada</h1>
@@ -50,7 +43,7 @@ export default function CurrentPage() {
         <MenuBar setMenuVisibility={setMenuVisibility} />
       </Show>
 
-      <div class="route-group" ref={(el) => (routeGroup = el)}>
+      <div class="route-group">
         <Router>
           <Route path={"/sales-service"} component={SalesService} />
           <Route path={"/manage-stocks"} component={ManageStocks} />

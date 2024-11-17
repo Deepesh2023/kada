@@ -23,9 +23,11 @@ const navbarItems: NavbarItems[] = [
   },
 ];
 
+export let navbar: undefined | HTMLElement;
+
 export default function Navbar() {
   return (
-    <nav class="navbar">
+    <nav class="navbar" ref={(el) => (navbar = el)}>
       <ul>
         <Index each={navbarItems}>
           {(navbarItem) => (
