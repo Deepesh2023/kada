@@ -7,9 +7,9 @@ export default function App() {
   return (
     <div class="container">
       <div class="navbar-container">
-        <Navbar />
+        <Navbar setMenuVisibility={null} />
       </div>
-      
+
       <CurrentPage />
     </div>
   );
