@@ -7,8 +7,16 @@ export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
   const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
     createSignal<boolean>(false);
 
+  let addNewButton: undefined | HTMLButtonElement;
+
   createEffect(() => {
     if (props.addNewSaleClicked() || props.addNewServiceClicked()) {
+      setIsAddNewButtonClicked(false);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target != addNewButton) {
       setIsAddNewButtonClicked(false);
     }
   });
@@ -22,6 +30,8 @@ export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
         </button>
       </Show>
       <button
+        class="add-new-button"
+        ref={(el) => (addNewButton = el)}
         onclick={() => setIsAddNewButtonClicked(!isAddNewButtonClicked())}
       >
         {isAddNewButtonClicked() ? "close" : "Add"}
