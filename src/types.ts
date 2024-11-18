@@ -17,3 +17,7 @@ export interface NavLinkType {
   name: string;
   link: string;
 }
+
+export interface NavLinkPropType {
+  setMenuVisibility: null | Setter<boolean>;
+}

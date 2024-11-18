@@ -1,13 +1,12 @@
 import { Index } from "solid-js";
 
-import { NavLinkType } from "../../types";
-import { Setter } from "solid-js/types/server/reactive.js";
+import { NavLinkPropType, NavLinkType } from "../../types";
 
 import "./navLinks.css";
 
 const navLinks: NavLinkType[] = [
   {
-    name: "Sales/Service",
+    name: "/",
     link: "/sales-service",
   },
   {
@@ -26,9 +25,7 @@ const navLinks: NavLinkType[] = [
 
 export let navLinksComponent: undefined | HTMLElement;
 
-export default function NavLinks(props: {
-  setMenuVisibility: null | Setter<boolean>;
-}) {
+export default function NavLinks(props: NavLinkPropType) {
   // can close the menubar when on narrow screens
   function closeMenu() {
     if (props.setMenuVisibility) {
