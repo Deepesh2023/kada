@@ -4,7 +4,6 @@
 }
 
 .header {
-  /* border: 1px solid black; */
   background-color: white;
   height: 48px;
   width: 100%;
@@ -16,12 +15,7 @@
 }
 
 .spacer {
-  border: 1px solid black;
   height: 48px;
-}
-
-.route-group {
-  border: 1px solid black;
 }
 
 @media screen and (width > 500px) {

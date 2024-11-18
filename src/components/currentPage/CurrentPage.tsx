@@ -14,23 +14,25 @@ import { navLinksComponent } from "../navLinks/NavLinks";
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
 
-  function eventHandler(e: MouseEvent) {
-    if (e.target !== navLinksComponent) {
+  let spacer: undefined | HTMLDivElement;
+
+  function closeMenu(e: MouseEvent) {
+    if (e.target !== navLinksComponent || e.target !== spacer) {
       setMenuVisibility(false);
     }
   }
 
   createEffect(() => {
     if (isMenuVisible()) {
-      document.addEventListener("click", eventHandler);
+      document.addEventListener("click", closeMenu);
     }
 
-    onCleanup(() => document.removeEventListener("click", eventHandler));
+    onCleanup(() => document.removeEventListener("click", closeMenu));
   });
 
   return (
     <div class="current-page">
-      <div class="spacer">
+      <div class="spacer" ref={(el) => (spacer = el)}>
         <div class="header">
           <button id="menu" onclick={() => setMenuVisibility(true)}>
             Menu
