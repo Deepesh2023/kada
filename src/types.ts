@@ -13,7 +13,7 @@ export interface AddNewButtonStackTypes {
   setAddNewServiceClicked: Setter<boolean>;
 }
 
-export interface NavbarItems {
+export interface NavLinkType {
   name: string;
   link: string;
 }

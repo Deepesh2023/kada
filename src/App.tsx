@@ -1,13 +1,13 @@
 import "./App.css";
 
-import Navbar from "./components/navbar/Navbar";
+import NavLinks from "./components/navbar/NavLinks";
 import CurrentPage from "./components/currentPage/CurrentPage";
 
 export default function App() {
   return (
     <div class="container">
-      <div class="navbar-container">
-        <Navbar setMenuVisibility={null} />
+      <div class="nav-bar">
+        <NavLinks setMenuVisibility={null} />
       </div>
 
       <CurrentPage />

@@ -1,11 +1,11 @@
 import { Index } from "solid-js";
 
-import { NavbarItems } from "../../types";
-
-import "./navbar.css";
+import { NavLinkType } from "../../types";
 import { Setter } from "solid-js/types/server/reactive.js";
 
-const navbarItems: NavbarItems[] = [
+import "./navLinks.css";
+
+const navLinks: NavLinkType[] = [
   {
     name: "Sales/Service",
     link: "/sales-service",
@@ -24,9 +24,9 @@ const navbarItems: NavbarItems[] = [
   },
 ];
 
-export let navbar: undefined | HTMLElement;
+export let navLinksComponent: undefined | HTMLElement;
 
-export default function Navbar(props: {
+export default function NavLinks(props: {
   setMenuVisibility: null | Setter<boolean>;
 }) {
   // can close the menubar when on narrow screens
@@ -37,12 +37,12 @@ export default function Navbar(props: {
   }
 
   return (
-    <nav class="navbar" ref={(el) => (navbar = el)}>
+    <nav class="navbar" ref={(el) => (navLinksComponent = el)}>
       <ul>
-        <Index each={navbarItems}>
-          {(navbarItem) => (
+        <Index each={navLinks}>
+          {(navLink) => (
             <li onclick={closeMenu}>
-              <a href={navbarItem().link}>{navbarItem().name}</a>
+              <a href={navLink().link}>{navLink().name}</a>
             </li>
           )}
         </Index>
