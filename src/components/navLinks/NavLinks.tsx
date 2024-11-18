@@ -23,7 +23,7 @@ const navLinks: NavLinkType[] = [
   },
 ];
 
-export let navLinksComponent: undefined | HTMLElement;
+export let navLinksHTMLElement: undefined | HTMLElement;
 
 export default function NavLinks(props: NavLinkPropType) {
   // can close the menubar when on narrow screens
@@ -34,7 +34,7 @@ export default function NavLinks(props: NavLinkPropType) {
   }
 
   return (
-    <nav class="navbar" ref={(el) => (navLinksComponent = el)}>
+    <nav class="navbar" ref={(el) => (navLinksHTMLElement = el)}>
       <ul>
         <Index each={navLinks}>
           {(navLink) => (

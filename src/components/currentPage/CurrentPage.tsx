@@ -8,16 +8,14 @@ import ManageStocks from "../../pages/ManageStocks";
 import History from "../../pages/History";
 import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
-import MenuBar from "../menuBar/MenuBar";
-import { navLinksComponent } from "../navLinks/NavLinks";
+import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
+import { navLinksHTMLElement } from "../navLinks/NavLinks";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
 
-  let spacer: undefined | HTMLDivElement;
-
   function closeMenu(e: MouseEvent) {
-    if (e.target !== navLinksComponent || e.target !== spacer) {
+    if (e.target !== navLinksHTMLElement && e.target !== menuBarHTMLElement) {
       setMenuVisibility(false);
     }
   }
@@ -32,7 +30,7 @@ export default function CurrentPage() {
 
   return (
     <div class="current-page">
-      <div class="spacer" ref={(el) => (spacer = el)}>
+      <div class="spacer">
         <div class="header">
           <button id="menu" onclick={() => setMenuVisibility(true)}>
             Menu
