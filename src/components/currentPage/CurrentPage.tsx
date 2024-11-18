@@ -47,7 +47,7 @@ export default function CurrentPage() {
 
       <div class="route-group">
         <Router>
-          <Route path={"/sales-service"} component={SalesService} />
+          <Route path={"/"} component={SalesService} />
           <Route path={"/manage-stocks"} component={ManageStocks} />
           <Route path={"/history"} component={History} />
           <Route path={"/stats"} component={Stats} />

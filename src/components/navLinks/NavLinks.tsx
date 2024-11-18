@@ -6,8 +6,8 @@ import "./navLinks.css";
 
 const navLinks: NavLinkType[] = [
   {
-    name: "/",
-    link: "/sales-service",
+    name: "Sales/service",
+    link: "/",
   },
   {
     name: "Manage stocks",
