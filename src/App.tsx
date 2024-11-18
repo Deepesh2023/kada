@@ -1,6 +1,6 @@
 import "./App.css";
 
-import NavLinks from "./components/navbar/NavLinks";
+import NavLinks from "./components/navLinks/NavLinks";
 import CurrentPage from "./components/currentPage/CurrentPage";
 
 export default function App() {

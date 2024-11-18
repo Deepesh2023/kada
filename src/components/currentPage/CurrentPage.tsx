@@ -9,7 +9,7 @@ import History from "../../pages/History";
 import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
 import MenuBar from "../menuBar/MenuBar";
-import { navLinksComponent } from "../navbar/NavLinks";
+import { navLinksComponent } from "../navLinks/NavLinks";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);

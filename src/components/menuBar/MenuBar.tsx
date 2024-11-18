@@ -1,6 +1,6 @@
 import { Setter } from "solid-js";
 
-import NavLinks from "../navbar/NavLinks";
+import NavLinks from "../navLinks/NavLinks";
 
 import "./menuBar.css";
 
