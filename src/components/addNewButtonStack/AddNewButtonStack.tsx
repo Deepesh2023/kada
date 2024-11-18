@@ -1,24 +1,26 @@
-import { createSignal, createEffect, Show } from "solid-js";
+import { createSignal, createEffect, Show, onCleanup } from "solid-js";
 
 import { AddNewButtonStackTypes } from "../../types";
 import "./addNewButtonStack.css";
 
 export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
-  const [isAddNewButtonClicked, setIsAddNewButtonClicked] =
+  const [isAddNewButtonClicked, setAddNewButtonClicked] =
     createSignal<boolean>(false);
 
   let addNewButton: undefined | HTMLButtonElement;
 
-  createEffect(() => {
-    if (props.addNewSaleClicked() || props.addNewServiceClicked()) {
-      setIsAddNewButtonClicked(false);
-    }
-  });
-
-  document.addEventListener("click", (e) => {
+  function closeAddNewButton(e: MouseEvent) {
     if (e.target != addNewButton) {
-      setIsAddNewButtonClicked(false);
+      setAddNewButtonClicked(false);
     }
+  }
+
+  createEffect(() => {
+    if (isAddNewButtonClicked()) {
+      document.addEventListener("click", closeAddNewButton);
+    }
+
+    onCleanup(() => document.removeEventListener("click", closeAddNewButton));
   });
 
   return (
@@ -32,7 +34,7 @@ export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
       <button
         class="add-new-button"
         ref={(el) => (addNewButton = el)}
-        onclick={() => setIsAddNewButtonClicked(!isAddNewButtonClicked())}
+        onclick={() => setAddNewButtonClicked(!isAddNewButtonClicked())}
       >
         {isAddNewButtonClicked() ? "close" : "Add"}
       </button>

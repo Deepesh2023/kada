@@ -7,9 +7,7 @@ export interface DialogBoxTypes {
 }
 
 export interface AddNewButtonStackTypes {
-  addNewSaleClicked: Accessor<boolean>;
   setAddNewSaleClicked: Setter<boolean>;
-  addNewServiceClicked: Accessor<boolean>;
   setAddNewServiceClicked: Setter<boolean>;
 }
 
