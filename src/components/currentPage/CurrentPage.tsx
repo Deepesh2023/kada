@@ -10,6 +10,7 @@ import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
 import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
 import { navLinksHTMLElement } from "../navLinks/NavLinks";
+import App from "../../App";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
