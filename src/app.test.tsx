@@ -14,7 +14,8 @@ describe("Kada app", () => {
   });
 
   test("The app lands on the sales-servie page by default", () => {
+    const heading = <h2>New sales/service</h2>;
     render(() => <App />);
-    expect(screen.getByText("New sales/service")).toEqual("New sales/service");
+    expect(screen.getByText("New sales/service")).toStrictEqual(heading);
   });
 });

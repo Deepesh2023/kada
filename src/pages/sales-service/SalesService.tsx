@@ -11,6 +11,8 @@ export default function SalesService() {
 
   return (
     <div class="sales-service-page">
+      <h2>New sales/service</h2>
+
       <DialogBox
         isDialogVisible={addNewSaleClicked}
         setDialogVisiblity={setAddNewSaleClicked}
