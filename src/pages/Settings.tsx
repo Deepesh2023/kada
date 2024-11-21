@@ -1,3 +1,7 @@
 export default function Settings() {
-  return <>settings works</>;
+  return (
+    <>
+      <h2>Settings</h2>
+    </>
+  );
 }

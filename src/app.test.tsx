@@ -75,9 +75,17 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
 
-    // test("clicking on the 'settings' link displays the settings page", async () => {
-    //   const pageHeading = <h1>Settings</h1>;
-    //   expect(await screen.findByText("Settings")).toStrictEqual(pageHeading);
-    // });
+    test("clicking on the 'settings' link displays the settings page", async () => {
+      render(() => <App />);
+      const user = userEvent.setup();
+      const pageLink = screen.getByRole("link", { name: "Settings" });
+
+      await user.click(pageLink);
+
+      const pageHeading = <h2>Settings</h2>;
+      expect(
+        await screen.findByRole("heading", { name: "Settings" })
+      ).toStrictEqual(pageHeading);
+    });
   });
 });
