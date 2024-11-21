@@ -25,16 +25,18 @@ describe("Kada app", () => {
       render(() => <App />);
     });
 
-    // test("clicking on the sales/service link displays the sales-service page", () => {
-    //   const pageLink = screen.getByRole("link", { name: "Sales/service" });
-    //   fireEvent(pageLink, new MouseEvent("click"));
+    test("clicking on the sales/service link displays the sales-service page", async () => {
+      const pageLink = screen.getByRole("link", { name: "Sales/service" });
+      const user = userEvent.setup();
 
-    //   const pageHeading = <h2>Sales and service</h2>;
-    //   const container = screen.getByTestId("sales-service-page");
+      await user.click(pageLink);
 
-    //   expect(screen.getByText("Sales and service")).toStrictEqual(pageHeading);
-    //   expect(container).toBeTruthy();
-    // });
+      const pageHeading = <h2>Sales and service</h2>;
+
+      expect(
+        screen.getByRole("heading", { name: "Sales and service" })
+      ).toStrictEqual(pageHeading);
+    });
 
     test("clicking on the 'manage store' link displays the manage-store page", async () => {
       const user = userEvent.setup();
