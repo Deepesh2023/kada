@@ -36,7 +36,7 @@ export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
         ref={(el) => (addNewButton = el)}
         onclick={() => setAddNewButtonClicked(!isAddNewButtonClicked())}
       >
-        {isAddNewButtonClicked() ? "close" : "Add"}
+        {isAddNewButtonClicked() ? "Close" : "Add"}
       </button>
     </div>
   );
