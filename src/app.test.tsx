@@ -1,6 +1,8 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { describe, test, expect, beforeEach, afterEach } from "vitest";
+import { describe, test, expect, afterEach } from "vitest";
+
+import "@testing-library/jest-dom/vitest";
 
 import App from "./App";
 
@@ -21,8 +23,6 @@ describe("Kada app", () => {
   });
 
   describe("clicking on the navbar links", () => {
-    afterEach(cleanup);
-
     test("clicking on the sales/service link displays the sales-service page", async () => {
       render(() => <App />);
       const pageLink = screen.getByRole("link", { name: "Sales/service" });
@@ -49,7 +49,7 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
 
-    test("clicking on the 'history' link displays the history page", async () => {
+    test("clicking on the 'History' link displays the history page", async () => {
       render(() => <App />);
       const user = userEvent.setup();
       const pageLink = screen.getByRole("link", { name: "History" });
@@ -62,7 +62,7 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
 
-    test("clicking on the 'stats' link displays the stats page", async () => {
+    test("clicking on the 'Stats' link displays the stats page", async () => {
       render(() => <App />);
       const user = userEvent.setup();
       const pageLink = screen.getByRole("link", { name: "Stats" });
@@ -75,7 +75,7 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
 
-    test("clicking on the 'settings' link displays the settings page", async () => {
+    test("clicking on the 'Settings' link displays the settings page", async () => {
       render(() => <App />);
       const user = userEvent.setup();
       const pageLink = screen.getByRole("link", { name: "Settings" });
