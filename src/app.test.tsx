@@ -62,10 +62,18 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
 
-    // test("clicking on the 'stats' link displays the stats page", async () => {
-    //   const pageHeading = <h1>Stats</h1>;
-    //   expect(await screen.findByText("Stats")).toStrictEqual(pageHeading);
-    // });
+    test("clicking on the 'stats' link displays the stats page", async () => {
+      render(() => <App />);
+      const user = userEvent.setup();
+      const pageLink = screen.getByRole("link", { name: "Stats" });
+
+      await user.click(pageLink);
+
+      const pageHeading = <h2>Stats</h2>;
+      expect(
+        await screen.findByRole("heading", { name: "Stats" })
+      ).toStrictEqual(pageHeading);
+    });
 
     // test("clicking on the 'settings' link displays the settings page", async () => {
     //   const pageHeading = <h1>Settings</h1>;
