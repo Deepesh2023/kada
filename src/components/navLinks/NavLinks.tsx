@@ -10,8 +10,8 @@ const navLinks: NavLinkType[] = [
     link: "/",
   },
   {
-    name: "Manage stocks",
-    link: "/manage-stocks",
+    name: "Manage store",
+    link: "/manage-store",
   },
   {
     name: "history",

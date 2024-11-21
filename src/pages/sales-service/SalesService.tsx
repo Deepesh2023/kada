@@ -10,8 +10,8 @@ export default function SalesService() {
   const [addNewServiceClicked, setAddNewServiceClicked] = createSignal(false);
 
   return (
-    <div class="sales-service-page">
-      <h2>New sales/service</h2>
+    <div class="sales-service-page" data-testid="sales-service-page">
+      <h2>Sales and service</h2>
 
       <DialogBox
         isDialogVisible={addNewSaleClicked}
