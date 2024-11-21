@@ -1,3 +1,7 @@
 export default function History() {
-  return <>History works</>;
+  return (
+    <>
+      <h2>History</h2>
+    </>
+  );
 }
