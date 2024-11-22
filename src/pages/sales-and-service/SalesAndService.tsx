@@ -1,5 +1,5 @@
 import { A } from "@solidjs/router";
-import "./salesService.css";
+import "./salesAndService.css";
 
 export default function SalesAndService() {
   return (
