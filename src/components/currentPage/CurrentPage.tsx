@@ -3,16 +3,16 @@ import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 
 import "./currentPage.css";
 
-import SalesService from "../../pages/sales-service/SalesService";
+import SalesAndService from "../../pages/sales-and-service/SalesAndService";
 import ManageStore from "../../pages/ManageStore";
 import History from "../../pages/History";
 import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
 import Sales from "../../pages/sales/Sales";
+import Service from "../../pages/service/Service";
 
 import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
 import { navLinksHTMLElement } from "../navLinks/NavLinks";
-import Service from "../../pages/service/service";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
@@ -54,7 +54,7 @@ export default function CurrentPage() {
           />
 
           <Route path={"/sales-and-service"}>
-            <Route path={"/"} component={SalesService} />
+            <Route path={"/"} component={SalesAndService} />
             <Route path={"sales"} component={Sales} />
             <Route path={"service"} component={Service} />
           </Route>

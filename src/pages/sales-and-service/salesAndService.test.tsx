@@ -1,6 +1,6 @@
 import { describe, test, expect, afterEach } from "vitest";
 import { screen, render, cleanup } from "@solidjs/testing-library";
-import SalesService from "./SalesService";
+import SalesService from "./SalesAndService";
 import userEvent from "@testing-library/user-event";
 
 describe("SalesService page", () => {

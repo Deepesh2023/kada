@@ -1,7 +1,7 @@
 import { A } from "@solidjs/router";
 import "./salesService.css";
 
-export default function SalesService() {
+export default function SalesAndService() {
   return (
     <div class="sales-service-page" data-testid="sales-service-page">
       <h2>Sales and service</h2>
