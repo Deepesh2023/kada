@@ -12,6 +12,7 @@ import Sales from "../../pages/sales/Sales";
 
 import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
 import { navLinksHTMLElement } from "../navLinks/NavLinks";
+import Service from "../../pages/service/service";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
@@ -55,6 +56,7 @@ export default function CurrentPage() {
           <Route path={"/sales-and-service"}>
             <Route path={"/"} component={SalesService} />
             <Route path={"sales"} component={Sales} />
+            <Route path={"service"} component={Service} />
           </Route>
 
           <Route path={"/manage-store"} component={ManageStore} />
