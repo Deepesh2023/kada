@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import "./salesService.css";
 
 export default function SalesService() {
@@ -7,10 +8,10 @@ export default function SalesService() {
 
       <ul>
         <li>
-          <a href="">Sales</a>
+          <A href="sales">Sales</A>
         </li>
         <li>
-          <a href="">Service</a>
+          <A href="service">Service</A>
         </li>
       </ul>
     </div>

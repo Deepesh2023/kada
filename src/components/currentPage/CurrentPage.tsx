@@ -1,4 +1,4 @@
-import { Route, Router } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
 import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 
 import "./currentPage.css";
@@ -8,6 +8,8 @@ import ManageStore from "../../pages/ManageStore";
 import History from "../../pages/History";
 import Stats from "../../pages/Stats";
 import Settings from "../../pages/Settings";
+import Sales from "../../pages/sales/Sales";
+
 import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
 import { navLinksHTMLElement } from "../navLinks/NavLinks";
 
@@ -45,7 +47,16 @@ export default function CurrentPage() {
 
       <div class="route-group">
         <Router>
-          <Route path={"/"} component={SalesService} />
+          <Route
+            path={"/"}
+            component={() => <Navigate href={"/sales-and-service"} />}
+          />
+
+          <Route path={"/sales-and-service"}>
+            <Route path={"/"} component={SalesService} />
+            <Route path={"sales"} component={Sales} />
+          </Route>
+
           <Route path={"/manage-store"} component={ManageStore} />
           <Route path={"/history"} component={History} />
           <Route path={"/stats"} component={Stats} />
