@@ -29,4 +29,9 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+
+  test: {
+    enviornment: "jsdom",
+    setUpFiles: ["./vitest-setup.ts"],
+  },
 }));
