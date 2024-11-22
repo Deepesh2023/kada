@@ -26,7 +26,7 @@ export default function AddNewButtonStack(props: AddNewButtonStackTypes) {
   return (
     <div class="add-new-button-stack">
       <Show when={isAddNewButtonClicked()}>
-        <button onclick={() => props.setAddNewSaleClicked(true)}>Sale</button>
+        <button onClick={() => props.setAddNewSaleClicked(true)}>Sale</button>
         <button onClick={() => props.setAddNewServiceClicked(true)}>
           Service
         </button>
