@@ -38,7 +38,7 @@ export default function CurrentPage() {
         <MenuBar setMenuVisibility={setMenuVisibility} />
       </Show>
 
-      <div class="route-group">
+      <div class="route-outlet">
         <RouterOutlet />
       </div>
     </div>
