@@ -14,11 +14,12 @@ describe("Kada app", () => {
     expect(app).toBeTruthy();
   });
 
-  test("The app lands on the sales-servie page by default", () => {
+  test("The app lands on the sales-servie page by default", async () => {
     const heading = <h2>Sales and service</h2>;
     render(() => <App />);
+
     expect(
-      screen.getByRole("heading", { name: "Sales and service" })
+      await screen.findByRole("heading", { name: "Sales and service" })
     ).toStrictEqual(heading);
   });
 
