@@ -4,7 +4,7 @@ import "./currentPage.css";
 
 import MenuBar, { menuBarHTMLElement } from "../menuBar/MenuBar";
 import { navLinksHTMLElement } from "../navLinks/NavLinks";
-import RouterOutlet from "../RouterOutLet";
+import RouterOutlet from "../RouterOutlet";
 
 export default function CurrentPage() {
   const [isMenuVisible, setMenuVisibility] = createSignal(false);
