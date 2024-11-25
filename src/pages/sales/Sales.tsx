@@ -1,7 +1,31 @@
 import { Show, createSignal } from "solid-js";
 
+interface SellingProcduct {
+  productName: string;
+  quantity: number;
+  price: number;
+}
+
 export default function Sales() {
+  let productSelectElement: undefined | HTMLSelectElement;
+  let productQuantityElement: undefined | HTMLInputElement;
+  let productPriceElement: undefined | HTMLInputElement;
+
   const [showNewSession, setShowNewSession] = createSignal(false);
+
+  const [sellingProducts, setSellingProducts] = createSignal<
+    SellingProcduct[] | null
+  >(null);
+
+  function addSellingProduct(e: Event) {
+    e.preventDefault();
+
+    console.log(
+      productSelectElement?.value,
+      productQuantityElement?.value,
+      productPriceElement?.value
+    );
+  }
 
   return (
     <>
@@ -14,20 +38,31 @@ export default function Sales() {
           <input type="checkbox" name="" id="" />
           <label>Auto detect bar code scans</label>
 
-          <form action="">
+          <form onsubmit={addSellingProduct}>
             <label for="product-select">Select product</label>
-            <select name="" id="product-select">
-              <option value="">Torch</option>
-              <option value="">battery</option>
+            <select
+              id="product-select"
+              ref={(el) => (productSelectElement = el)}
+            >
+              <option value="torch">Torch</option>
+              <option value="battery">battery</option>
             </select>
 
             <label for="product-quantity">Quantity</label>
-            <input type="number" id="prodcut-quantity" />
+            <input
+              type="number"
+              id="prodcut-quantity"
+              ref={(el) => (productQuantityElement = el)}
+            />
 
             <label for="product-price">Price</label>
-            <input type="number" id="product-price" />
+            <input
+              type="number"
+              id="product-price"
+              ref={(el) => (productPriceElement = el)}
+            />
 
-            <button>Add</button>
+            <button type="submit">Add</button>
           </form>
 
           <table>
