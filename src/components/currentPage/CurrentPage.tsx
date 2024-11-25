@@ -27,7 +27,7 @@ export default function CurrentPage() {
     <div class="current-page">
       <div class="spacer">
         <div class="header">
-          <button id="menu" onclick={() => setMenuVisibility(true)}>
+          <button id="menu-button" onclick={() => setMenuVisibility(true)}>
             Menu
           </button>
           <h1>Kada</h1>
