@@ -7,7 +7,7 @@ interface SellingProcduct {
 }
 
 export default function Sales() {
-  let productSelectElement: undefined | HTMLSelectElement;
+  let productNameElement: undefined | HTMLInputElement;
   let productQuantityElement: undefined | HTMLInputElement;
   let productPriceElement: undefined | HTMLInputElement;
 
@@ -17,11 +17,11 @@ export default function Sales() {
     SellingProcduct[] | null
   >(null);
 
-  function addSellingProduct(e: Event) {
+  function addSellingProduct(e: SubmitEvent) {
     e.preventDefault();
 
     console.log(
-      productSelectElement?.value,
+      productNameElement?.value,
       productQuantityElement?.value,
       productPriceElement?.value
     );
@@ -39,20 +39,25 @@ export default function Sales() {
           <label>Auto detect bar code scans</label>
 
           <form onsubmit={addSellingProduct}>
-            <label for="product-select">Select product</label>
-            <select
-              id="product-select"
-              ref={(el) => (productSelectElement = el)}
-            >
+            <label for="product-name">Select product</label>
+            <input
+              type="text"
+              list="product-list"
+              id="product-name"
+              ref={(el) => (productNameElement = el)}
+              required
+            />
+            <datalist id="product-list">
               <option value="torch">Torch</option>
               <option value="battery">battery</option>
-            </select>
+            </datalist>
 
             <label for="product-quantity">Quantity</label>
             <input
               type="number"
               id="prodcut-quantity"
               ref={(el) => (productQuantityElement = el)}
+              required
             />
 
             <label for="product-price">Price</label>
@@ -60,6 +65,7 @@ export default function Sales() {
               type="number"
               id="product-price"
               ref={(el) => (productPriceElement = el)}
+              required
             />
 
             <button type="submit">Add</button>
