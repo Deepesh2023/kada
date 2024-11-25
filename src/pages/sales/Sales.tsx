@@ -1,4 +1,4 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createSignal, For } from "solid-js";
 
 interface SellingProcduct {
   productName: string;
@@ -13,17 +13,21 @@ export default function Sales() {
 
   const [showNewSession, setShowNewSession] = createSignal(false);
 
-  const [sellingProducts, setSellingProducts] = createSignal<
-    SellingProcduct[] | null
-  >(null);
+  const [sellingProducts, setSellingProducts] = createSignal<SellingProcduct[]>(
+    []
+  );
 
   function addSellingProduct(e: SubmitEvent) {
     e.preventDefault();
 
-    console.log(
-      productNameElement?.value,
-      productQuantityElement?.value,
-      productPriceElement?.value
+    const newSellingProduct: SellingProcduct = {
+      productName: productNameElement?.value,
+      quantity: Number(productQuantityElement?.value),
+      price: Number(productPriceElement?.value),
+    };
+
+    setSellingProducts((sellingProducts) =>
+      sellingProducts?.concat(newSellingProduct)
     );
   }
 
@@ -80,6 +84,18 @@ export default function Sales() {
                 <th>Quantity</th>
                 <th>Price X quantity</th>
               </tr>
+
+              <For each={sellingProducts()}>
+                {(sellingProduct, index) => (
+                  <tr>
+                    <td>{index() + 1}</td>
+                    <td>{sellingProduct.productName}</td>
+                    <td>{sellingProduct.price}</td>
+                    <td>{sellingProduct.quantity}</td>
+                    <td>{sellingProduct.price * sellingProduct.quantity}</td>
+                  </tr>
+                )}
+              </For>
             </tbody>
           </table>
 
