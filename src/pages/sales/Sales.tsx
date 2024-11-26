@@ -3,6 +3,8 @@ import { SellingProcduct } from "../../types";
 
 import NewSellingProductForm from "../../forms/newSellingProductForm/NewSellingProductForm";
 
+import "./sales.css";
+
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
@@ -27,7 +29,11 @@ export default function Sales() {
           <input type="checkbox" name="" id="" />
           <label>Auto detect bar code scans</label>
 
+          <hr />
+
           <NewSellingProductForm addSellingProduct={addSellingProduct} />
+
+          <hr />
 
           <table>
             <tbody>
@@ -51,6 +57,13 @@ export default function Sales() {
                 )}
               </For>
             </tbody>
+
+            <tfoot>
+              <tr>
+                <th colSpan={4}>Total</th>
+                <td>Total</td>
+              </tr>
+            </tfoot>
           </table>
 
           <div>
@@ -58,6 +71,8 @@ export default function Sales() {
             <button>Submit</button>
           </div>
         </div>
+
+        <hr />
       </Show>
     </>
   );
