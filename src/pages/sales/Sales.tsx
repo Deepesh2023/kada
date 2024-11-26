@@ -6,6 +6,7 @@ import NewSellingProductForm from "../../forms/newSellingProductForm/NewSellingP
 import "./sales.css";
 
 import SellingProductsTable from "../../tables/sellingProductsTable/SellingProductsTable";
+import AdditionalSaleDataForm from "../../forms/additionalSaleDataForm/AdditionalSaleDataForm";
 
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
@@ -38,6 +39,15 @@ export default function Sales() {
           <hr />
 
           <SellingProductsTable sellingProducts={sellingProducts()} />
+
+          <hr />
+
+          <details>
+            <summary>Additional sale info</summary>
+            <AdditionalSaleDataForm />
+          </details>
+
+          <hr />
 
           <div>
             <button onclick={() => setShowNewSession(false)}>Close</button>
