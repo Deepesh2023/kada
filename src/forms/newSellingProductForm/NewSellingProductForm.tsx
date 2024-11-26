@@ -20,6 +20,7 @@ export default function NewSellingProductForm(
     };
 
     props.addSellingProduct(newSellingProduct);
+    setNewSaleForm({ productName: "", quantity: 1, price: 0 });
   }
 
   return (
@@ -31,10 +32,7 @@ export default function NewSellingProductForm(
         id="product-name"
         value={newSaleForm().productName}
         oninput={(e) =>
-          setNewSaleForm({
-            ...newSaleForm(),
-            productName: e.target.value,
-          })
+          setNewSaleForm({ ...newSaleForm(), productName: e.target.value })
         }
         required
       />
@@ -54,6 +52,7 @@ export default function NewSellingProductForm(
             quantity: Number(e.target.value),
           })
         }
+        min={1}
         required
       />
 
@@ -69,6 +68,7 @@ export default function NewSellingProductForm(
           })
         }
         required
+        min={0}
       />
 
       <button type="submit">Add</button>
