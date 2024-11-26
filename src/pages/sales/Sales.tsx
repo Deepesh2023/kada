@@ -18,6 +18,11 @@ export default function Sales() {
     );
   }
 
+  const totalPrice = () =>
+    sellingProducts().reduce((totalPrice, currentProduct) => {
+      return totalPrice + currentProduct.price * currentProduct.quantity;
+    }, 0);
+
   return (
     <>
       <h2>sales</h2>
@@ -61,7 +66,7 @@ export default function Sales() {
             <tfoot>
               <tr>
                 <th colSpan={4}>Total</th>
-                <td>Total</td>
+                <td>{totalPrice()}</td>
               </tr>
             </tfoot>
           </table>
