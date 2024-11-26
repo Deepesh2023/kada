@@ -38,7 +38,10 @@ export default function Sales() {
 
           <hr />
 
-          <SellingProductsTable sellingProducts={sellingProducts()} />
+          <SellingProductsTable
+            sellingProducts={sellingProducts}
+            setSellingProducts={setSellingProducts}
+          />
 
           <hr />
 
@@ -50,12 +53,10 @@ export default function Sales() {
           <hr />
 
           <div>
-            <button onclick={() => setShowNewSession(false)}>Close</button>
+            <button onclick={() => setShowNewSession(false)}>Cancel</button>
             <button>Submit</button>
           </div>
         </div>
-
-        <hr />
       </Show>
     </>
   );

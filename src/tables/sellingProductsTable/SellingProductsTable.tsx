@@ -1,15 +1,23 @@
-import { For } from "solid-js";
+import { Accessor, For, Setter } from "solid-js";
 import { SellingProcduct } from "../../types";
 
 import "./sellingProductsTable.css";
 
 export default function SellingProductsTable(props: {
-  sellingProducts: SellingProcduct[];
+  sellingProducts: Accessor<SellingProcduct[]>;
+  setSellingProducts: Setter<SellingProcduct[]>;
 }) {
   const totalPrice = () =>
-    props.sellingProducts.reduce((totalPrice, currentProduct) => {
+    props.sellingProducts().reduce((totalPrice, currentProduct) => {
       return totalPrice + currentProduct.price * currentProduct.quantity;
     }, 0);
+
+  function deleteSellingProduct(index: number) {
+    return () =>
+      props.setSellingProducts(
+        props.sellingProducts().filter((sellingProduct, i) => i !== index)
+      );
+  }
 
   return (
     <table>
@@ -22,7 +30,7 @@ export default function SellingProductsTable(props: {
           <th>Price X quantity</th>
         </tr>
 
-        <For each={props.sellingProducts}>
+        <For each={props.sellingProducts()}>
           {(sellingProduct, index) => (
             <tr>
               <td>{index() + 1}</td>
@@ -30,6 +38,9 @@ export default function SellingProductsTable(props: {
               <td>{sellingProduct.price}</td>
               <td>{sellingProduct.quantity}</td>
               <td>{sellingProduct.price * sellingProduct.quantity}</td>
+              <td>
+                <button onclick={deleteSellingProduct(index())}>Delete</button>
+              </td>
             </tr>
           )}
         </For>
