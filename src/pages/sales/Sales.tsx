@@ -7,23 +7,25 @@ interface SellingProcduct {
 }
 
 export default function Sales() {
-  let productNameElement: undefined | HTMLInputElement;
-  let productQuantityElement: undefined | HTMLInputElement;
-  let productPriceElement: undefined | HTMLInputElement;
-
   const [showNewSession, setShowNewSession] = createSignal(false);
 
   const [sellingProducts, setSellingProducts] = createSignal<SellingProcduct[]>(
     []
   );
 
+  const [newSaleForm, setNewSaleForm] = createSignal({
+    productName: "",
+    price: 0,
+    quantity: 1,
+  });
+
   function addSellingProduct(e: SubmitEvent) {
     e.preventDefault();
 
     const newSellingProduct: SellingProcduct = {
-      productName: productNameElement?.value,
-      quantity: Number(productQuantityElement?.value),
-      price: Number(productPriceElement?.value),
+      productName: newSaleForm().productName,
+      quantity: newSaleForm().quantity,
+      price: newSaleForm().price,
     };
 
     setSellingProducts((sellingProducts) =>
@@ -48,7 +50,13 @@ export default function Sales() {
               type="text"
               list="product-list"
               id="product-name"
-              ref={(el) => (productNameElement = el)}
+              value={newSaleForm().productName}
+              oninput={(e) =>
+                setNewSaleForm({
+                  ...newSaleForm(),
+                  productName: e.target.value,
+                })
+              }
               required
             />
             <datalist id="product-list">
@@ -60,7 +68,13 @@ export default function Sales() {
             <input
               type="number"
               id="prodcut-quantity"
-              ref={(el) => (productQuantityElement = el)}
+              value={newSaleForm().quantity}
+              oninput={(e) =>
+                setNewSaleForm({
+                  ...newSaleForm(),
+                  quantity: Number(e.target.value),
+                })
+              }
               required
             />
 
@@ -68,7 +82,13 @@ export default function Sales() {
             <input
               type="number"
               id="product-price"
-              ref={(el) => (productPriceElement = el)}
+              value={newSaleForm().price}
+              oninput={(e) =>
+                setNewSaleForm({
+                  ...newSaleForm(),
+                  price: Number(e.target.value),
+                })
+              }
               required
             />
 
