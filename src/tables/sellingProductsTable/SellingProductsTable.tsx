@@ -38,6 +38,10 @@ export default function SellingProductsTable(props: {
               <td>{sellingProduct.price}</td>
               <td>{sellingProduct.quantity}</td>
               <td>{sellingProduct.price * sellingProduct.quantity}</td>
+
+              <td>
+                <button>Edit</button>
+              </td>
               <td>
                 <button onclick={deleteSellingProduct(index())}>Delete</button>
               </td>
