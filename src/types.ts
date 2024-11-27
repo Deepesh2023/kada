@@ -29,3 +29,12 @@ export interface SellingProcduct {
 export interface NewSellingProductFormPropsType {
   addSellingProduct: (sellingProduct: SellingProcduct) => void;
 }
+
+export interface newSaleFormType {
+  productName: string;
+  price: number;
+  quantity: number;
+  customerName: string;
+  remarks: string;
+  doNotRecord: boolean;
+}

@@ -1,9 +1,7 @@
-import { Show, createSignal } from "solid-js";
-import { SellingProcduct } from "../../types";
+import { Show, createSignal, For } from "solid-js";
+import { newSaleFormType, SellingProcduct } from "../../types";
 
 import "./sales.css";
-
-import SellingProductsTable from "../../tables/sellingProductsTable/SellingProductsTable";
 
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
@@ -12,7 +10,7 @@ export default function Sales() {
     []
   );
 
-  const [newSaleForm, setNewSaleForm] = createSignal({
+  const [newSaleForm, setNewSaleForm] = createSignal<newSaleFormType>({
     productName: "",
     price: 0,
     quantity: 1,
@@ -42,6 +40,18 @@ export default function Sales() {
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
+  }
+
+  const totalPrice = () =>
+    sellingProducts().reduce((totalPrice, currentProduct) => {
+      return totalPrice + currentProduct.price * currentProduct.quantity;
+    }, 0);
+
+  function deleteSellingProduct(index: number) {
+    return () =>
+      setSellingProducts(
+        sellingProducts().filter((sellingProduct, i) => i !== index)
+      );
   }
 
   return (
@@ -111,10 +121,45 @@ export default function Sales() {
 
             <hr />
 
-            <SellingProductsTable
-              sellingProducts={sellingProducts}
-              setSellingProducts={setSellingProducts}
-            />
+            <table>
+              <tbody>
+                <tr>
+                  <th>No</th>
+                  <th>Product name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Price X quantity</th>
+                </tr>
+
+                <For each={sellingProducts()}>
+                  {(sellingProduct, index) => (
+                    <tr>
+                      <td>{index() + 1}</td>
+                      <td>{sellingProduct.productName}</td>
+                      <td>{sellingProduct.price}</td>
+                      <td>{sellingProduct.quantity}</td>
+                      <td>{sellingProduct.price * sellingProduct.quantity}</td>
+
+                      <td>
+                        <button>Edit</button>
+                      </td>
+                      <td>
+                        <button onclick={deleteSellingProduct(index())}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                </For>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <th colSpan={4}>Total</th>
+                  <td>{totalPrice()}</td>
+                </tr>
+              </tfoot>
+            </table>
 
             <hr />
 
