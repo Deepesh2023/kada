@@ -16,9 +16,6 @@ export default function Sales() {
     productName: "",
     price: 0,
     quantity: 1,
-  });
-
-  const [additonalSaleDetailsForm, setAdditionalSalesForm] = createSignal({
     customerName: "",
     remarks: "",
     doNotRecord: false,
@@ -35,7 +32,16 @@ export default function Sales() {
       sellingProducts?.concat(newSellingProduct)
     );
 
-    setNewSaleForm({ productName: "", quantity: 1, price: 0 });
+    setNewSaleForm({
+      ...newSaleForm(),
+      productName: "",
+      quantity: 1,
+      price: 0,
+    });
+  }
+
+  function submitSale(e: SubmitEvent) {
+    e.preventDefault();
   }
 
   return (
@@ -51,7 +57,7 @@ export default function Sales() {
 
           <hr />
 
-          <form>
+          <form onsubmit={submitSale}>
             <label for="product-name">Select product</label>
             <input
               type="text"
@@ -119,10 +125,10 @@ export default function Sales() {
               <input
                 type="text"
                 id="customer-name"
-                value={additonalSaleDetailsForm().customerName}
+                value={newSaleForm().customerName}
                 oninput={(e) =>
-                  setAdditionalSalesForm({
-                    ...additonalSaleDetailsForm(),
+                  setNewSaleForm({
+                    ...newSaleForm(),
                     customerName: e.target.value,
                   })
                 }
@@ -131,10 +137,10 @@ export default function Sales() {
               <label for="remarks">Remarks</label>
               <textarea
                 id="remarks"
-                value={additonalSaleDetailsForm().remarks}
+                value={newSaleForm().remarks}
                 oninput={(e) =>
-                  setAdditionalSalesForm({
-                    ...additonalSaleDetailsForm(),
+                  setNewSaleForm({
+                    ...newSaleForm(),
                     remarks: e.target.value,
                   })
                 }
@@ -143,11 +149,11 @@ export default function Sales() {
               <input
                 type="checkbox"
                 id="do-not-record"
-                checked={additonalSaleDetailsForm().doNotRecord}
+                checked={newSaleForm().doNotRecord}
                 onclick={() =>
-                  setAdditionalSalesForm({
-                    ...additonalSaleDetailsForm(),
-                    doNotRecord: !additonalSaleDetailsForm().doNotRecord,
+                  setNewSaleForm({
+                    ...newSaleForm(),
+                    doNotRecord: !newSaleForm().doNotRecord,
                   })
                 }
               />
