@@ -54,6 +54,20 @@ export default function Sales() {
       );
   }
 
+  function editSellingProduct(index: number) {
+    return () => {
+      const deleteAction = deleteSellingProduct(index);
+      setNewSaleForm({
+        ...newSaleForm(),
+        productName: sellingProducts()[index].productName,
+        quantity: sellingProducts()[index].quantity,
+        price: sellingProducts()[index].price,
+      });
+
+      deleteAction();
+    };
+  }
+
   return (
     <>
       <h2>sales</h2>
@@ -141,7 +155,9 @@ export default function Sales() {
                       <td>{sellingProduct.price * sellingProduct.quantity}</td>
 
                       <td>
-                        <button>Edit</button>
+                        <button onclick={editSellingProduct(index())}>
+                          Edit
+                        </button>
                       </td>
                       <td>
                         <button onclick={deleteSellingProduct(index())}>
