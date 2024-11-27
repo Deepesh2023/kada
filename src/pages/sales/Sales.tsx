@@ -81,7 +81,7 @@ export default function Sales() {
 
           <hr />
 
-          <form onsubmit={submitSale}>
+          <form onSubmit={submitSale} aria-label="new sale form">
             <label for="product-name">Select product</label>
             <input
               type="text"
