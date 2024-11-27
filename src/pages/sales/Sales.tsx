@@ -95,6 +95,7 @@ export default function Sales() {
                 })
               }
               required
+              data-testid="product-name"
             />
             <datalist id="product-list">
               <option value="torch">Torch</option>
@@ -105,7 +106,7 @@ export default function Sales() {
             <input
               type="number"
               id="prodcut-quantity"
-              value={newSaleForm().quantity}
+              placeholder={newSaleForm().quantity.toString()}
               oninput={(e) =>
                 setNewSaleForm({
                   ...newSaleForm(),
@@ -114,6 +115,7 @@ export default function Sales() {
               }
               min={1}
               required
+              data-testid="product-quantity"
             />
 
             <label for="product-price">Price</label>
@@ -129,6 +131,7 @@ export default function Sales() {
               }
               required
               min={0}
+              data-testid="product-price"
             />
 
             <button onclick={addSellingProduct}>Add</button>
