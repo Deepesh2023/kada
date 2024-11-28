@@ -20,11 +20,6 @@ export default function Sales() {
   });
 
   function addSellingProduct() {
-    if (newSaleForm().productName.length === 0) {
-      // TODO: implement error handling
-      return;
-    }
-
     const newSellingProduct: SellingProcduct = {
       productName: newSaleForm().productName,
       quantity: newSaleForm().quantity,
@@ -72,6 +67,14 @@ export default function Sales() {
       deleteAction();
     };
   }
+
+  const disableAddSellingProductButton = () => {
+    if (newSaleForm().productName.length === 0) {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <>
@@ -140,7 +143,12 @@ export default function Sales() {
               data-testid="product-price"
             />
 
-            <button onclick={addSellingProduct}>Add</button>
+            <button
+              onclick={addSellingProduct}
+              disabled={disableAddSellingProductButton()}
+            >
+              Add
+            </button>
 
             <hr />
 
