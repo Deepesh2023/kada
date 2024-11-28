@@ -1,5 +1,5 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import { describe, test, expect, afterEach } from "vitest";
 import Sales from "./Sales";
 
@@ -28,34 +28,9 @@ describe("The Sales page", () => {
 
   test("Can input a product and adding it shows up on the table", async () => {
     render(() => <Sales />);
-    const newSessionButton = screen.getByRole("button", {
-      name: "New session",
-    });
     const user = userEvent.setup();
 
-    await user.click(newSessionButton);
-
-    const productNameInput = screen.getByTestId("product-name");
-    const productQuantityInput = screen.getByTestId("product-quantity");
-    const productPriceInput = screen.getByTestId("product-price");
-    const addProductButton = screen.getByRole("button", { name: "Add" });
-
-    await user.type(productNameInput, "Candy");
-    await user.type(productQuantityInput, "5");
-    await user.type(productPriceInput, "3");
-
-    await user.click(addProductButton);
-
-    await user.type(productNameInput, "Book");
-    await user.type(productQuantityInput, "4");
-    await user.type(productPriceInput, "20");
-
-    await user.click(addProductButton);
-
-    // two products-
-    //     5 candies cositing 3 each
-    //     4 books costing 20 each
-    // total of (5 * 3) + (4 * 20) = 95
+    await sellingProductTableCreation(user);
 
     const table = screen.getByRole("table");
     const productNameDisplayOnTable = screen.getByRole("cell", {
@@ -75,4 +50,53 @@ describe("The Sales page", () => {
     expect(productPriceDisplayOnTable).toHaveTextContent("5");
     expect(totalPriceDisplayOnTable).toHaveTextContent("95");
   });
+
+  test("Can delete a selling product from table", async () => {
+    render(() => <Sales />);
+    const user = userEvent.setup();
+    await sellingProductTableCreation(user);
+
+    let tableRows = screen.getAllByRole("row");
+
+    expect(tableRows.length).toBe(4);
+
+    const deleteProductButtons = screen.getAllByRole("button", {
+      name: "Delete",
+    });
+
+    await user.click(deleteProductButtons[1]);
+    tableRows = screen.getAllByRole("row");
+
+    expect(tableRows.length).toBe(3);
+  });
 });
+
+async function sellingProductTableCreation(user: UserEvent) {
+  const newSessionButton = screen.getByRole("button", {
+    name: "New session",
+  });
+
+  await user.click(newSessionButton);
+
+  // two products-
+  //     5 candies cositing 3 each
+  //     4 books costing 20 each
+  // total of (5 * 3) + (4 * 20) = 95
+
+  const productNameInput = screen.getByTestId("product-name");
+  const productQuantityInput = screen.getByTestId("product-quantity");
+  const productPriceInput = screen.getByTestId("product-price");
+  const addProductButton = screen.getByRole("button", { name: "Add" });
+
+  await user.type(productNameInput, "Candy");
+  await user.type(productQuantityInput, "5");
+  await user.type(productPriceInput, "3");
+
+  await user.click(addProductButton);
+
+  await user.type(productNameInput, "Book");
+  await user.type(productQuantityInput, "4");
+  await user.type(productPriceInput, "20");
+
+  await user.click(addProductButton);
+}
