@@ -18,39 +18,19 @@ const [testStore, setTestStore] = createStore({
 });
 
 export default function Sales() {
-  const [newSaleForm, setNewSaleForm] = createSignal<newSaleFormType>({
-    productName: "",
-    price: 0,
-    quantity: 1,
-    customerName: "",
-    remarks: "",
-    doNotRecord: false,
-  });
-
-  const disableAddSellingProductButton = () => {
-    if (newSaleForm().productName.length === 0) {
-      return true;
-    }
-
-    return false;
-  };
-
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
-      productName: newSaleForm().productName,
-      quantity: newSaleForm().quantity,
-      price: newSaleForm().price,
+      productName: testStore.newSaleForm.productName,
+      quantity: testStore.newSaleForm.quantity,
+      price: testStore.newSaleForm.price,
     };
 
     setTestStore("sellingProducts", (currentSellingProducts) =>
       currentSellingProducts?.concat(newSellingProduct)
     );
 
-    setNewSaleForm({
-      ...newSaleForm(),
-      productName: "",
-      quantity: 1,
-      price: 0,
+    setTestStore("newSaleForm", (currentNewSaleForm) => {
+      return { ...currentNewSaleForm, productName: "", quantity: 1, price: 0 };
     });
   }
 
@@ -66,11 +46,13 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setNewSaleForm({
-        ...newSaleForm(),
-        productName: testStore.sellingProducts[index].productName,
-        quantity: testStore.sellingProducts[index].quantity,
-        price: testStore.sellingProducts[index].price,
+      setTestStore("newSaleForm", (currentNewSaleForm) => {
+        return {
+          ...currentNewSaleForm,
+          productName: testStore.sellingProducts[index].productName,
+          price: testStore.sellingProducts[index].price,
+          quantity: testStore.sellingProducts[index].quantity,
+        };
       });
 
       deleteAction();
@@ -102,11 +84,10 @@ export default function Sales() {
               type="text"
               list="product-list"
               id="product-name"
-              value={newSaleForm().productName}
+              value={testStore.newSaleForm.productName}
               oninput={(e) =>
-                setNewSaleForm({
-                  ...newSaleForm(),
-                  productName: e.target.value,
+                setTestStore("newSaleForm", (currentNewSaleForm) => {
+                  return { ...currentNewSaleForm, productName: e.target.value };
                 })
               }
               required
@@ -121,13 +102,15 @@ export default function Sales() {
             <input
               type="number"
               id="product-quantity"
-              value={newSaleForm().quantity}
-              oninput={(e) =>
-                setNewSaleForm({
-                  ...newSaleForm(),
-                  quantity: Number(e.target.value),
-                })
-              }
+              value={testStore.newSaleForm.quantity}
+              oninput={(e) => {
+                setTestStore("newSaleForm", (currentNewSaleForm) => {
+                  return {
+                    ...currentNewSaleForm,
+                    quantity: Number(e.target.value),
+                  };
+                });
+              }}
               min={1}
               onfocus={(e) => e.target.select()}
               required
@@ -138,13 +121,15 @@ export default function Sales() {
             <input
               type="number"
               id="product-price"
-              value={newSaleForm().price}
-              oninput={(e) =>
-                setNewSaleForm({
-                  ...newSaleForm(),
-                  price: Number(e.target.value),
-                })
-              }
+              value={testStore.newSaleForm.price}
+              oninput={(e) => {
+                setTestStore("newSaleForm", (currentNewSaleForm) => {
+                  return {
+                    ...currentNewSaleForm,
+                    price: Number(e.target.value),
+                  };
+                });
+              }}
               required
               min={0}
               data-testid="product-price"
@@ -152,7 +137,7 @@ export default function Sales() {
 
             <button
               onclick={addSellingProduct}
-              disabled={disableAddSellingProductButton()}
+              // disabled={disableAddSellingProductButton()}
             >
               Add
             </button>
@@ -210,11 +195,13 @@ export default function Sales() {
               <input
                 type="text"
                 id="customer-name"
-                value={newSaleForm().customerName}
+                value={testStore.newSaleForm.customerName}
                 oninput={(e) =>
-                  setNewSaleForm({
-                    ...newSaleForm(),
-                    customerName: e.target.value,
+                  setTestStore("newSaleForm", (currentNewSaleForm) => {
+                    return {
+                      ...currentNewSaleForm,
+                      customerName: e.target.value,
+                    };
                   })
                 }
               />
@@ -222,11 +209,10 @@ export default function Sales() {
               <label for="remarks">Remarks</label>
               <textarea
                 id="remarks"
-                value={newSaleForm().remarks}
+                value={testStore.newSaleForm.remarks}
                 oninput={(e) =>
-                  setNewSaleForm({
-                    ...newSaleForm(),
-                    remarks: e.target.value,
+                  setTestStore("newSaleForm", (currentNewSaleForm) => {
+                    return { ...currentNewSaleForm, remarks: e.target.value };
                   })
                 }
               ></textarea>
@@ -234,11 +220,13 @@ export default function Sales() {
               <input
                 type="checkbox"
                 id="do-not-record"
-                checked={newSaleForm().doNotRecord}
+                checked={testStore.newSaleForm.doNotRecord}
                 onclick={() =>
-                  setNewSaleForm({
-                    ...newSaleForm(),
-                    doNotRecord: !newSaleForm().doNotRecord,
+                  setTestStore("newSaleForm", (currentNewSaleForm) => {
+                    return {
+                      ...currentNewSaleForm,
+                      doNotRecord: !currentNewSaleForm.doNotRecord,
+                    };
                   })
                 }
               />
