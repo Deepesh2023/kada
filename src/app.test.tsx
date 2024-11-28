@@ -1,10 +1,12 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { describe, test, expect, afterEach } from "vitest";
+import { describe, test, expect, afterEach, vi, afterAll } from "vitest";
 
 import "@testing-library/jest-dom/vitest";
 
 import App from "./App";
+
+window.scrollTo = vi.fn();
 
 describe("Kada app", () => {
   afterEach(cleanup);
@@ -89,4 +91,6 @@ describe("Kada app", () => {
       ).toStrictEqual(pageHeading);
     });
   });
+
+  afterAll(vi.clearAllMocks);
 });

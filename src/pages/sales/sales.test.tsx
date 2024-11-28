@@ -16,6 +16,7 @@ describe("The Sales page", () => {
 
   test("Clicking on the 'New session' button brings up a new sale form", async () => {
     render(() => <Sales />);
+
     const newSessionButton = screen.getByRole("button", {
       name: "New session",
     });
