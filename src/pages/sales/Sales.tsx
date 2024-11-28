@@ -106,7 +106,7 @@ export default function Sales() {
             <input
               type="number"
               id="prodcut-quantity"
-              placeholder={newSaleForm().quantity.toString()}
+              value={newSaleForm().quantity}
               oninput={(e) =>
                 setNewSaleForm({
                   ...newSaleForm(),
@@ -114,6 +114,7 @@ export default function Sales() {
                 })
               }
               min={1}
+              onfocus={(e) => e.target.select()}
               required
               data-testid="product-quantity"
             />

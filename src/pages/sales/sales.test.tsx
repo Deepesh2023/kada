@@ -40,24 +40,39 @@ describe("The Sales page", () => {
     const productPriceInput = screen.getByTestId("product-price");
     const addProductButton = screen.getByRole("button", { name: "Add" });
 
-    await user.type(productNameInput, "Torch");
+    await user.type(productNameInput, "Candy");
     await user.type(productQuantityInput, "5");
-    await user.type(productPriceInput, "10");
+    await user.type(productPriceInput, "3");
 
     await user.click(addProductButton);
 
+    await user.type(productNameInput, "Book");
+    await user.type(productQuantityInput, "4");
+    await user.type(productPriceInput, "20");
+
+    await user.click(addProductButton);
+
+    // two products-
+    //     5 candies cositing 3 each
+    //     4 books costing 20 each
+    // total of (5 * 3) + (4 * 20) = 95
+
     const table = screen.getByRole("table");
     const productNameDisplayOnTable = screen.getByRole("cell", {
-      name: "Torch",
+      name: "Candy",
     });
     const productQuantityDisplayOnTable = screen.getByRole("cell", {
+      name: "3",
+    });
+    const productPriceDisplayOnTable = screen.getByRole("cell", {
       name: "5",
     });
-    const productPriceDisplayOnTable = screen.getByRole("cell", { name: "10" });
+    const totalPriceDisplayOnTable = screen.getByRole("cell", { name: "95" });
 
     expect(table.children.length).toBe(2);
-    expect(productNameDisplayOnTable).toHaveTextContent("Torch");
-    expect(productQuantityDisplayOnTable).toHaveTextContent("5");
-    expect(productPriceDisplayOnTable).toHaveTextContent("10");
+    expect(productNameDisplayOnTable).toHaveTextContent("Candy");
+    expect(productQuantityDisplayOnTable).toHaveTextContent("3");
+    expect(productPriceDisplayOnTable).toHaveTextContent("5");
+    expect(totalPriceDisplayOnTable).toHaveTextContent("95");
   });
 });
