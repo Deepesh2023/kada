@@ -20,6 +20,11 @@ export default function Sales() {
   });
 
   function addSellingProduct() {
+    if (newSaleForm().productName.length === 0) {
+      // TODO: implement error handling
+      return;
+    }
+
     const newSellingProduct: SellingProcduct = {
       productName: newSaleForm().productName,
       quantity: newSaleForm().quantity,

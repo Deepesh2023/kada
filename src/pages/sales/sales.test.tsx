@@ -1,6 +1,9 @@
 import { cleanup, render, screen } from "@solidjs/testing-library";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { describe, test, expect, afterEach } from "vitest";
+
+import { createSellingProductTable } from "./testHelper";
+
 import Sales from "./Sales";
 
 describe("The Sales page", () => {
@@ -98,34 +101,27 @@ describe("The Sales page", () => {
     expect(productQuantityInput.id).toEqual("product-quantity");
     expect(productPriceInput.id).toEqual("product-price");
   });
-});
 
-async function createSellingProductTable(user: UserEvent) {
-  const newSessionButton = screen.getByRole("button", {
-    name: "New session",
+  test("Cannot add a empty entry to the table", async () => {
+    render(() => <Sales />);
+    const user = userEvent.setup();
+
+    const newSessionButton = screen.getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    let tableRows = screen.getAllByRole("row");
+    expect(tableRows.length).toBe(2);
+
+    const addNewSellingProductButton = screen.getByRole("button", {
+      name: "Add",
+    });
+
+    await user.click(addNewSellingProductButton);
+    tableRows = screen.getAllByRole("row");
+
+    expect(tableRows.length).toBe(2);
   });
-
-  await user.click(newSessionButton);
-
-  // two products-
-  //     5 candies cositing 3 each
-  //     4 books costing 20 each
-  // total of (5 * 3) + (4 * 20) = 95
-
-  const productNameInput = screen.getByTestId("product-name");
-  const productQuantityInput = screen.getByTestId("product-quantity");
-  const productPriceInput = screen.getByTestId("product-price");
-  const addProductButton = screen.getByRole("button", { name: "Add" });
-
-  await user.type(productNameInput, "Candy");
-  await user.type(productQuantityInput, "5");
-  await user.type(productPriceInput, "3");
-
-  await user.click(addProductButton);
-
-  await user.type(productNameInput, "Book");
-  await user.type(productQuantityInput, "4");
-  await user.type(productPriceInput, "20");
-
-  await user.click(addProductButton);
-}
+});
