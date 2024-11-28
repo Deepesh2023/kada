@@ -105,7 +105,7 @@ export default function Sales() {
             <label for="product-quantity">Quantity</label>
             <input
               type="number"
-              id="prodcut-quantity"
+              id="product-quantity"
               value={newSaleForm().quantity}
               oninput={(e) =>
                 setNewSaleForm({

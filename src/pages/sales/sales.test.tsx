@@ -31,7 +31,7 @@ describe("The Sales page", () => {
     render(() => <Sales />);
     const user = userEvent.setup();
 
-    await sellingProductTableCreation(user);
+    await createSellingProductTable(user);
 
     const table = screen.getByRole("table");
     const productNameDisplayOnTable = screen.getByRole("cell", {
@@ -55,7 +55,7 @@ describe("The Sales page", () => {
   test("Can delete a selling product from table", async () => {
     render(() => <Sales />);
     const user = userEvent.setup();
-    await sellingProductTableCreation(user);
+    await createSellingProductTable(user);
 
     let tableRows = screen.getAllByRole("row");
 
@@ -70,9 +70,37 @@ describe("The Sales page", () => {
 
     expect(tableRows.length).toBe(3);
   });
+
+  test("Can edit a selling product", async () => {
+    render(() => <Sales />);
+    const user = userEvent.setup();
+
+    await createSellingProductTable(user);
+
+    let tableRows = screen.getAllByRole("row");
+
+    expect(tableRows.length).toBe(4);
+
+    const editSellingProductButtons = screen.getAllByRole("button", {
+      name: "Edit",
+    });
+
+    await user.click(editSellingProductButtons[1]);
+
+    const productNameInput = screen.getByDisplayValue("Book");
+    const productQuantityInput = screen.getByDisplayValue("4");
+    const productPriceInput = screen.getByDisplayValue("20");
+
+    tableRows = screen.getAllByRole("row");
+
+    expect(tableRows.length).toBe(3);
+    expect(productNameInput.id).toEqual("product-name");
+    expect(productQuantityInput.id).toEqual("product-quantity");
+    expect(productPriceInput.id).toEqual("product-price");
+  });
 });
 
-async function sellingProductTableCreation(user: UserEvent) {
+async function createSellingProductTable(user: UserEvent) {
   const newSessionButton = screen.getByRole("button", {
     name: "New session",
   });
