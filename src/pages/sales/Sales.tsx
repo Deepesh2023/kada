@@ -1,15 +1,23 @@
 import { Show, createSignal, For } from "solid-js";
+import { createStore } from "solid-js/store";
 import { newSaleFormType, SellingProcduct } from "../../types";
 
 import "./sales.css";
 
+const [testStore, setTestStore] = createStore({
+  showNewSession: false,
+  sellingProducts: new Array<SellingProcduct>(),
+  newSaleForm: {
+    productName: "",
+    price: 0,
+    quantity: 1,
+    customerName: "",
+    remarks: "",
+    doNotRecord: false,
+  },
+});
+
 export default function Sales() {
-  const [showNewSession, setShowNewSession] = createSignal(false);
-
-  const [sellingProducts, setSellingProducts] = createSignal<SellingProcduct[]>(
-    []
-  );
-
   const [newSaleForm, setNewSaleForm] = createSignal<newSaleFormType>({
     productName: "",
     price: 0,
@@ -19,6 +27,14 @@ export default function Sales() {
     doNotRecord: false,
   });
 
+  const disableAddSellingProductButton = () => {
+    if (newSaleForm().productName.length === 0) {
+      return true;
+    }
+
+    return false;
+  };
+
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
       productName: newSaleForm().productName,
@@ -26,8 +42,8 @@ export default function Sales() {
       price: newSaleForm().price,
     };
 
-    setSellingProducts((sellingProducts) =>
-      sellingProducts?.concat(newSellingProduct)
+    setTestStore("sellingProducts", (currentSellingProducts) =>
+      currentSellingProducts?.concat(newSellingProduct)
     );
 
     setNewSaleForm({
@@ -38,50 +54,41 @@ export default function Sales() {
     });
   }
 
-  function submitSale(e: SubmitEvent) {
-    e.preventDefault();
-  }
-
-  const totalPrice = () =>
-    sellingProducts().reduce((totalPrice, currentProduct) => {
-      return totalPrice + currentProduct.price * currentProduct.quantity;
-    }, 0);
-
   function deleteSellingProduct(index: number) {
-    return () =>
-      setSellingProducts(
-        sellingProducts().filter((sellingProduct, i) => i !== index)
+    return () => {
+      setTestStore("sellingProducts", (currentSellingProducts) =>
+        currentSellingProducts.filter((currentSellingProduct, i) => i !== index)
       );
+    };
   }
 
   function editSellingProduct(index: number) {
     return () => {
       const deleteAction = deleteSellingProduct(index);
+
       setNewSaleForm({
         ...newSaleForm(),
-        productName: sellingProducts()[index].productName,
-        quantity: sellingProducts()[index].quantity,
-        price: sellingProducts()[index].price,
+        productName: testStore.sellingProducts[index].productName,
+        quantity: testStore.sellingProducts[index].quantity,
+        price: testStore.sellingProducts[index].price,
       });
 
       deleteAction();
     };
   }
 
-  const disableAddSellingProductButton = () => {
-    if (newSaleForm().productName.length === 0) {
-      return true;
-    }
-
-    return false;
-  };
+  function submitSale(e: SubmitEvent) {
+    e.preventDefault();
+  }
 
   return (
     <>
       <h2>sales</h2>
-      <button onclick={() => setShowNewSession(true)}>New session</button>
+      <button onclick={() => setTestStore("showNewSession", () => true)}>
+        New session
+      </button>
 
-      <Show when={showNewSession()}>
+      <Show when={testStore.showNewSession}>
         <div>
           {/* yet to be implemented */}
           <input type="checkbox" name="" id="" />
@@ -162,7 +169,7 @@ export default function Sales() {
                   <th>Price X quantity</th>
                 </tr>
 
-                <For each={sellingProducts()}>
+                <For each={testStore.sellingProducts}>
                   {(sellingProduct, index) => (
                     <tr>
                       <td>{index() + 1}</td>
@@ -189,7 +196,7 @@ export default function Sales() {
               <tfoot>
                 <tr>
                   <th colSpan={4}>Total</th>
-                  <td>{totalPrice()}</td>
+                  <td>0</td>
                 </tr>
               </tfoot>
             </table>
@@ -241,7 +248,11 @@ export default function Sales() {
             <hr />
 
             <div>
-              <button onclick={() => setShowNewSession(false)}>Cancel</button>
+              <button
+                onclick={() => setTestStore("showNewSession", () => false)}
+              >
+                Cancel
+              </button>
               <button type="submit">Submit</button>
             </div>
           </form>
