@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import { describe, test, expect, afterEach, vi, afterAll } from "vitest";
 
@@ -9,8 +9,6 @@ import App from "./App";
 window.scrollTo = vi.fn();
 
 describe("Kada app", () => {
-  afterEach(cleanup);
-
   test("Renders the app", () => {
     const app = render(() => <App />);
     expect(app).toBeTruthy();

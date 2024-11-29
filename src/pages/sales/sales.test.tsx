@@ -1,20 +1,18 @@
-import { cleanup, render, screen } from "@solidjs/testing-library";
+import { render, screen } from "@solidjs/testing-library";
 import { userEvent } from "@testing-library/user-event";
-import { describe, test, expect, afterEach } from "vitest";
+import { describe, test, expect } from "vitest";
 
 import { createSellingProductTable } from "./testHelper";
 
 import Sales from "./Sales";
 
 describe("The Sales page", () => {
-  afterEach(cleanup);
-
   test("Sales page renders", () => {
     render(() => <Sales />);
-    const newSessionButton = screen.getByRole("button", {
+
+    screen.getByRole("button", {
       name: "New session",
     });
-    expect(newSessionButton).toBeDefined();
   });
 
   test("Clicking on the 'New session' button brings up a new sale form", async () => {
@@ -27,7 +25,7 @@ describe("The Sales page", () => {
 
     await user.click(newSessionButton);
 
-    expect(screen.getByRole("form", { name: "new sale form" })).toBeDefined();
+    screen.getByRole("form", { name: "new sale form" });
   });
 
   test("Can input a product and adding it shows up on the table", async () => {
@@ -36,7 +34,8 @@ describe("The Sales page", () => {
 
     await createSellingProductTable(user);
 
-    const table = screen.getByRole("table");
+    const tableRows = screen.getAllByRole("row");
+
     const productNameDisplayOnTable = screen.getByRole("cell", {
       name: "Candy",
     });
@@ -48,7 +47,7 @@ describe("The Sales page", () => {
     });
     const totalPriceDisplayOnTable = screen.getByRole("cell", { name: "95" });
 
-    expect(table.children.length).toBe(2);
+    expect(tableRows.length).toBe(4);
     expect(productNameDisplayOnTable).toHaveTextContent("Candy");
     expect(productQuantityDisplayOnTable).toHaveTextContent("3");
     expect(productPriceDisplayOnTable).toHaveTextContent("5");

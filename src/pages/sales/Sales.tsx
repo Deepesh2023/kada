@@ -1,4 +1,4 @@
-import { Show, createSignal, For } from "solid-js";
+import { Show, createSignal, For, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { newSaleFormType, SellingProcduct } from "../../types";
 
@@ -18,6 +18,14 @@ const [testStore, setTestStore] = createStore({
 });
 
 export default function Sales() {
+  const totalPrice = () =>
+    testStore.sellingProducts.reduce((total, sellingProduct) => {
+      return (total += sellingProduct.price * sellingProduct.quantity);
+    }, 0);
+
+  const disableAddSellingProductButton = () =>
+    testStore.newSaleForm.productName.length === 0 ? true : false;
+
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
       productName: testStore.newSaleForm.productName,
@@ -137,7 +145,7 @@ export default function Sales() {
 
             <button
               onclick={addSellingProduct}
-              // disabled={disableAddSellingProductButton()}
+              disabled={disableAddSellingProductButton()}
             >
               Add
             </button>
@@ -180,8 +188,8 @@ export default function Sales() {
 
               <tfoot>
                 <tr>
-                  <th colSpan={4}>Total</th>
-                  <td>0</td>
+                  <th colSpan={4}>Total: </th>
+                  <td>{totalPrice()}</td>
                 </tr>
               </tfoot>
             </table>
