@@ -33,6 +33,6 @@ export default defineConfig(async () => ({
   test: {
     enviornment: "jsdom",
     globals: true,
-    setupFiles: "./vitest-setup.ts",
+    setupFiles: ["./vitest-setup.ts"],
   },
 }));

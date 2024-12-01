@@ -1,6 +1,6 @@
-import { Show, createSignal, For, createEffect } from "solid-js";
+import { Show, For } from "solid-js";
 import { createStore } from "solid-js/store";
-import { newSaleFormType, SellingProcduct } from "../../types";
+import { SellingProcduct } from "../../types";
 
 import "./sales.css";
 
@@ -73,7 +73,7 @@ export default function Sales() {
 
   return (
     <>
-      <h2>sales</h2>
+      <h2>Sales</h2>
       <button onclick={() => setTestStore("showNewSession", () => true)}>
         New session
       </button>

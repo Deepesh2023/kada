@@ -2,9 +2,7 @@ import { screen } from "@solidjs/testing-library";
 import { UserEvent } from "@testing-library/user-event";
 
 export async function createSellingProductTable(user: UserEvent) {
-  const newSessionButton = screen.getByRole("button", {
-    name: "New session",
-  });
+  const newSessionButton = screen.getByRole("button", { name: "New session" });
 
   await user.click(newSessionButton);
 
