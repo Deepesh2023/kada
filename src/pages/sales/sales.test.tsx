@@ -24,4 +24,31 @@ describe("The Sales page", () => {
     await userEvent.click(newSessionButton);
     screen.getByTestId("new-sale-form");
   });
+
+  test("Can input values into the fields and clicking on the 'Add' button adds a new selling product", async () => {
+    render(() => <Sales />);
+
+    const newSessionButton = screen.getByRole("button", {
+      name: "New session",
+    });
+
+    await userEvent.click(newSessionButton);
+
+    const sellingProductNameInput = screen.getByTestId("product-name-input");
+    const sellingProductPriceInput = screen.getByTestId("product-price-input");
+    const sellingProductQuantityInput = screen.getByTestId(
+      "product-quantity-input"
+    );
+
+    await user.type(sellingProductNameInput, "book");
+    await user.type(sellingProductPriceInput, "20");
+    await user.type(sellingProductQuantityInput, "2");
+
+    const addButton = screen.getByRole("button", { name: "Add" });
+    await user.click(addButton);
+
+    const sellingProductOnTable = screen.getByTestId("selling-product-row");
+
+    expect(sellingProductOnTable).toBeVisible();
+  });
 });

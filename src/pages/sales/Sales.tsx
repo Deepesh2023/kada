@@ -99,7 +99,7 @@ export default function Sales() {
                 })
               }
               required
-              data-testid="product-name"
+              data-testid="product-name-input"
             />
             <datalist id="product-list">
               <option value="torch">Torch</option>
@@ -122,7 +122,7 @@ export default function Sales() {
               min={1}
               onfocus={(e) => e.target.select()}
               required
-              data-testid="product-quantity"
+              data-testid="product-quantity-input"
             />
 
             <label for="product-price">Price</label>
@@ -140,7 +140,7 @@ export default function Sales() {
               }}
               required
               min={0}
-              data-testid="product-price"
+              data-testid="product-price-input"
             />
 
             <button
@@ -164,7 +164,7 @@ export default function Sales() {
 
                 <For each={testStore.sellingProducts}>
                   {(sellingProduct, index) => (
-                    <tr>
+                    <tr data-testid="selling-product-row">
                       <td>{index() + 1}</td>
                       <td>{sellingProduct.productName}</td>
                       <td>{sellingProduct.price}</td>
