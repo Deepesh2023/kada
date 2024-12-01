@@ -92,10 +92,24 @@ describe("The Sales page", () => {
     // editing the first selling product
     await user.click(editButtons[0]);
 
+    const tableRows = getAllByRole("row");
+
     expect(productNameInput).toHaveValue("book");
     expect(productPriceInput).toHaveValue(20);
     expect(productQuantityInput).toHaveValue(2);
+    expect(tableRows.length).toBe(4);
   });
 
-  
+  test("Can delete a selling product", async () => {
+    const { getAllByRole } = render(() => <Sales />);
+
+    const deleteButtons = getAllByRole("button", { name: "Delete" });
+
+    // deletes the first one
+    await user.click(deleteButtons[0]);
+
+    const tableRows = getAllByRole("row");
+
+    expect(tableRows.length).toBe(3);
+  });
 });
