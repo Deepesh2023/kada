@@ -79,7 +79,7 @@ export default function Sales() {
       </button>
 
       <Show when={testStore.showNewSession}>
-        <div>
+        <div data-testid="new-sale-form">
           {/* yet to be implemented */}
           <input type="checkbox" name="" id="" />
           <label>Auto detect bar code scans</label>
