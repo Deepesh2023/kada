@@ -11,9 +11,9 @@ export async function createSellingProductTable(user: UserEvent) {
   //     4 books costing 20 each
   // total of (5 * 3) + (4 * 20) = 95
 
-  const productNameInput = screen.getByTestId("product-name");
-  const productQuantityInput = screen.getByTestId("product-quantity");
-  const productPriceInput = screen.getByTestId("product-price");
+  const productNameInput = screen.getByTestId("product-name-input");
+  const productQuantityInput = screen.getByTestId("product-quantity-input");
+  const productPriceInput = screen.getByTestId("product-price-input");
   const addProductButton = screen.getByRole("button", { name: "Add" });
 
   await user.type(productNameInput, "Candy");
