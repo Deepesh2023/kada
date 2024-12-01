@@ -78,4 +78,24 @@ describe("The Sales page", () => {
 
     expect(sellingProductsRowOnTable.length).toBe(5);
   });
+
+  test("Can edit a selling product", async () => {
+    const { getAllByRole, getByTestId } = render(() => <Sales />);
+
+    const productNameInput = getByTestId("product-name-input");
+    const productQuantityInput = getByTestId("product-quantity-input");
+    const productPriceInput = getByTestId("product-price-input");
+
+    const editButtons = getAllByRole("button", { name: "Edit" });
+
+    // 2 books costing 20 each
+    // editing the first selling product
+    await user.click(editButtons[0]);
+
+    expect(productNameInput).toHaveValue("book");
+    expect(productPriceInput).toHaveValue(20);
+    expect(productQuantityInput).toHaveValue(2);
+  });
+
+  
 });
