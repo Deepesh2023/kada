@@ -130,6 +130,7 @@ describe("The Sales page", () => {
     expect(productNameInput).toHaveValue("Candy");
     expect(productPriceInput).toHaveValue(3);
     expect(productQuantityInput).toHaveValue(5);
+
     expect(tableRows.length).toBe(3);
   });
 

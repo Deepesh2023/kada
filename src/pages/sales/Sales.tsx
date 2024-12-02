@@ -51,8 +51,9 @@ export default function Sales() {
 
   function deleteSellingProduct(index: number) {
     return () => {
-      setNewSaleSession("sellingProducts", (currentSellingProducts) =>
-        currentSellingProducts.splice(index, 1)
+      setNewSaleSession(
+        "sellingProducts",
+        newSaleSession.sellingProducts.toSpliced(index, 1)
       );
     };
   }
