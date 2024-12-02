@@ -3,6 +3,7 @@ import { render } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
 import Sales from "./Sales";
+import { sellingProductsTableCreation } from "./testHelper";
 
 const user = userEvent.setup();
 
@@ -49,8 +50,14 @@ describe("The Sales page", () => {
     expect(sellingProductOnTable).toBeVisible();
   });
 
-  test("Can add multiple products", async () => {
-    const { getByRole, getByTestId, getAllByRole } = render(() => <Sales />);
+  test("Can add multiple products to the table", async () => {
+    const { getByRole, getAllByRole, getByTestId } = render(() => <Sales />);
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
 
     // two products-
     //     5 candies cositing 3 each
@@ -76,32 +83,87 @@ describe("The Sales page", () => {
 
     const sellingProductsRowOnTable = getAllByRole("row");
 
-    expect(sellingProductsRowOnTable.length).toBe(5);
+    expect(sellingProductsRowOnTable.length).toBe(4);
   });
 
-  test("Can edit a selling product", async () => {
-    const { getAllByRole, getByTestId } = render(() => <Sales />);
+  test("Can edit a selling product and the editing one will be removed from the table", async () => {
+    const { getAllByRole, getByTestId, getByRole } = render(() => <Sales />);
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    // two products-
+    //     5 candies cositing 3 each
+    //     4 books costing 20 each
+    // total of (5 * 3) + (4 * 20) = 95
+
+    let productNameInput = getByTestId("product-name-input");
+    let productQuantityInput = getByTestId("product-quantity-input");
+    let productPriceInput = getByTestId("product-price-input");
+    let addProductButton = getByRole("button", { name: "Add" });
+
+    await user.type(productNameInput, "Candy");
+    await user.type(productQuantityInput, "5");
+    await user.type(productPriceInput, "3");
+
+    await user.click(addProductButton);
+
+    await user.type(productNameInput, "Book");
+    await user.type(productQuantityInput, "4");
+    await user.type(productPriceInput, "20");
+
+    await user.click(addProductButton);
+
+    const editButtons = getAllByRole("button", { name: "Edit" });
+
+    // editing the first selling product
+    await user.click(editButtons[0]);
+
+    productNameInput = getByTestId("product-name-input");
+    productQuantityInput = getByTestId("product-quantity-input");
+    productPriceInput = getByTestId("product-price-input");
+
+    const tableRows = getAllByRole("row");
+
+    expect(productNameInput).toHaveValue("Candy");
+    expect(productPriceInput).toHaveValue(3);
+    expect(productQuantityInput).toHaveValue(5);
+    expect(tableRows.length).toBe(3);
+  });
+
+  test("Can delete a selling product", async () => {
+    const { getAllByRole, getByRole, getByTestId } = render(() => <Sales />);
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    // two products-
+    //     5 candies cositing 3 each
+    //     4 books costing 20 each
+    // total of (5 * 3) + (4 * 20) = 95
 
     const productNameInput = getByTestId("product-name-input");
     const productQuantityInput = getByTestId("product-quantity-input");
     const productPriceInput = getByTestId("product-price-input");
+    const addProductButton = getByRole("button", { name: "Add" });
 
-    const editButtons = getAllByRole("button", { name: "Edit" });
+    await user.type(productNameInput, "Candy");
+    await user.type(productQuantityInput, "5");
+    await user.type(productPriceInput, "3");
 
-    // 2 books costing 20 each
-    // editing the first selling product
-    await user.click(editButtons[0]);
+    await user.click(addProductButton);
 
-    const tableRows = getAllByRole("row");
+    await user.type(productNameInput, "Book");
+    await user.type(productQuantityInput, "4");
+    await user.type(productPriceInput, "20");
 
-    expect(productNameInput).toHaveValue("book");
-    expect(productPriceInput).toHaveValue(20);
-    expect(productQuantityInput).toHaveValue(2);
-    expect(tableRows.length).toBe(4);
-  });
-
-  test("Can delete a selling product", async () => {
-    const { getAllByRole } = render(() => <Sales />);
+    await user.click(addProductButton);
 
     const deleteButtons = getAllByRole("button", { name: "Delete" });
 

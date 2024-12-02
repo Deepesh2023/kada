@@ -1,23 +1,24 @@
-import { Show, For } from "solid-js";
+import { Show, For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { SellingProcduct } from "../../types";
 
 import "./sales.css";
 
-const [testStore, setTestStore] = createStore({
-  showNewSession: false,
-  sellingProducts: new Array<SellingProcduct>(),
-  newSaleForm: {
-    productName: "",
-    price: 0,
-    quantity: 1,
-    customerName: "",
-    remarks: "",
-    doNotRecord: false,
-  },
-});
-
 export default function Sales() {
+  const [showNewSession, setShowNewSession] = createSignal(false);
+
+  const [testStore, setTestStore] = createStore({
+    sellingProducts: new Array<SellingProcduct>(),
+    newSaleForm: {
+      productName: "",
+      price: 0,
+      quantity: 1,
+      customerName: "",
+      remarks: "",
+      doNotRecord: false,
+    },
+  });
+
   const totalPrice = () =>
     testStore.sellingProducts.reduce((total, sellingProduct) => {
       return (total += sellingProduct.price * sellingProduct.quantity);
@@ -27,12 +28,8 @@ export default function Sales() {
     testStore.newSaleForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
-    if (testStore.newSaleForm.productName.trim().length === 0) {
-      return;
-    }
-
     const newSellingProduct: SellingProcduct = {
-      productName: testStore.newSaleForm.productName,
+      productName: testStore.newSaleForm.productName.trim(),
       quantity: testStore.newSaleForm.quantity,
       price: testStore.newSaleForm.price,
     };
@@ -91,11 +88,9 @@ export default function Sales() {
   return (
     <>
       <h2>Sales</h2>
-      <button onclick={() => setTestStore("showNewSession", () => true)}>
-        New session
-      </button>
+      <button onclick={() => setShowNewSession(true)}>New session</button>
 
-      <Show when={testStore.showNewSession}>
+      <Show when={showNewSession()}>
         <div data-testid="new-sale-form">
           {/* yet to be implemented */}
           <input type="checkbox" name="" id="" />
@@ -236,11 +231,7 @@ export default function Sales() {
             <hr />
 
             <div>
-              <button
-                onclick={() => setTestStore("showNewSession", () => false)}
-              >
-                Cancel
-              </button>
+              <button onclick={() => setShowNewSession(false)}>Cancel</button>
               <button type="submit">Submit</button>
             </div>
           </form>
