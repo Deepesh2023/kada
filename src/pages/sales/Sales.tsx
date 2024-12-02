@@ -1,5 +1,5 @@
 import { Show, For, createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, reconcile } from "solid-js/store";
 import { SellingProcduct } from "../../types";
 
 import "./sales.css";
@@ -7,16 +7,18 @@ import "./sales.css";
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
+  const intialNewSaleForm = {
+    productName: "",
+    price: 0,
+    quantity: 1,
+    customerName: "",
+    remarks: "",
+    doNotRecord: false,
+  };
+
   const [newSaleSession, setNewSaleSession] = createStore({
     sellingProducts: new Array<SellingProcduct>(),
-    newSaleForm: {
-      productName: "",
-      price: 0,
-      quantity: 1,
-      customerName: "",
-      remarks: "",
-      doNotRecord: false,
-    },
+    newSaleForm: intialNewSaleForm,
   });
 
   const totalPrice = () =>
@@ -81,6 +83,24 @@ export default function Sales() {
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
+  }
+
+  function cancelSale() {
+    if (newSaleSession.sellingProducts.length === 0) {
+      setNewSaleSession("newSaleForm", intialNewSaleForm);
+      setShowNewSession(false);
+      return;
+    }
+
+    const shouldCancel = window.confirm(
+      "Are you sure you want to cancel the sale?"
+    );
+
+    if (shouldCancel) {
+      setNewSaleSession("newSaleForm", intialNewSaleForm);
+      setNewSaleSession("sellingProducts", []);
+      setShowNewSession(false);
+    }
   }
 
   return (
@@ -228,7 +248,7 @@ export default function Sales() {
             <hr />
 
             <div>
-              <button onclick={() => setShowNewSession(false)}>Cancel</button>
+              <button onclick={cancelSale}>Cancel</button>
               <button type="submit">Submit</button>
             </div>
           </form>
