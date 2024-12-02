@@ -1,5 +1,5 @@
 import { Show, For, createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, reconcile } from "solid-js/store";
 import { SellingProcduct } from "../../types";
 
 import "./sales.css";
@@ -7,7 +7,7 @@ import "./sales.css";
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
-  const [testStore, setTestStore] = createStore({
+  const [newSaleSession, setNewSaleSession] = createStore({
     sellingProducts: new Array<SellingProcduct>(),
     newSaleForm: {
       productName: "",
@@ -20,32 +20,34 @@ export default function Sales() {
   });
 
   const totalPrice = () =>
-    testStore.sellingProducts.reduce((total, sellingProduct) => {
+    newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
       return (total += sellingProduct.price * sellingProduct.quantity);
     }, 0);
 
   const disableAddSellingProductButton = () =>
-    testStore.newSaleForm.productName.length === 0 ? true : false;
+    newSaleSession.newSaleForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
-      productName: testStore.newSaleForm.productName.trim(),
-      quantity: testStore.newSaleForm.quantity,
-      price: testStore.newSaleForm.price,
+      productName: newSaleSession.newSaleForm.productName.trim(),
+      quantity: newSaleSession.newSaleForm.quantity,
+      price: newSaleSession.newSaleForm.price,
     };
 
-    setTestStore("sellingProducts", (currentSellingProducts) =>
-      currentSellingProducts?.concat(newSellingProduct)
+    setNewSaleSession(
+      "sellingProducts",
+      newSaleSession.sellingProducts.length,
+      newSellingProduct
     );
 
-    setTestStore("newSaleForm", (currentNewSaleForm) => {
+    setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
       return { ...currentNewSaleForm, productName: "", quantity: 1, price: 0 };
     });
   }
 
   function deleteSellingProduct(index: number) {
     return () => {
-      setTestStore("sellingProducts", (currentSellingProducts) =>
+      setNewSaleSession("sellingProducts", (currentSellingProducts) =>
         currentSellingProducts.filter((currentSellingProduct, i) => i !== index)
       );
     };
@@ -55,12 +57,12 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setTestStore("newSaleForm", (currentNewSaleForm) => {
+      setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
         return {
           ...currentNewSaleForm,
-          productName: testStore.sellingProducts[index].productName,
-          price: testStore.sellingProducts[index].price,
-          quantity: testStore.sellingProducts[index].quantity,
+          productName: newSaleSession.sellingProducts[index].productName,
+          price: newSaleSession.sellingProducts[index].price,
+          quantity: newSaleSession.sellingProducts[index].quantity,
         };
       });
 
@@ -72,7 +74,7 @@ export default function Sales() {
     return (e: InputEvent) => {
       const { name, value } = e.target as HTMLInputElement;
 
-      setTestStore("newSaleForm", (currentNewSaleForm) => {
+      setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
         return {
           ...currentNewSaleForm,
           [name]: Number(value) ? Number(value) : value,
@@ -83,6 +85,7 @@ export default function Sales() {
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
+    console.log(newSaleSession);
   }
 
   return (
@@ -105,7 +108,7 @@ export default function Sales() {
               list="product-list"
               id="product-name"
               name="productName"
-              value={testStore.newSaleForm.productName}
+              value={newSaleSession.newSaleForm.productName}
               oninput={inputHandler()}
               data-testid="product-name-input"
             />
@@ -119,7 +122,7 @@ export default function Sales() {
               type="number"
               id="product-quantity"
               name="quantity"
-              value={testStore.newSaleForm.quantity}
+              value={newSaleSession.newSaleForm.quantity}
               oninput={inputHandler()}
               min={1}
               onfocus={(e) => e.target.select()}
@@ -132,7 +135,7 @@ export default function Sales() {
               type="number"
               id="product-price"
               name="price"
-              value={testStore.newSaleForm.price}
+              value={newSaleSession.newSaleForm.price}
               oninput={inputHandler()}
               required
               min={0}
@@ -158,7 +161,7 @@ export default function Sales() {
                   <th>Price X quantity</th>
                 </tr>
 
-                <For each={testStore.sellingProducts}>
+                <For each={newSaleSession.sellingProducts}>
                   {(sellingProduct, index) => (
                     <tr data-testid="selling-product-row">
                       <td>{index() + 1}</td>
@@ -200,7 +203,7 @@ export default function Sales() {
                 type="text"
                 id="customer-name"
                 name="customerName"
-                value={testStore.newSaleForm.customerName}
+                value={newSaleSession.newSaleForm.customerName}
                 oninput={inputHandler()}
               />
 
@@ -208,16 +211,16 @@ export default function Sales() {
               <textarea
                 id="remarks"
                 name="remarks"
-                value={testStore.newSaleForm.remarks}
+                value={newSaleSession.newSaleForm.remarks}
                 oninput={inputHandler()}
               ></textarea>
 
               <input
                 type="checkbox"
                 id="do-not-record"
-                checked={testStore.newSaleForm.doNotRecord}
+                checked={newSaleSession.newSaleForm.doNotRecord}
                 onclick={() =>
-                  setTestStore("newSaleForm", (currentNewSaleForm) => {
+                  setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
                     return {
                       ...currentNewSaleForm,
                       doNotRecord: !currentNewSaleForm.doNotRecord,

@@ -3,7 +3,6 @@ import { render } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
 import Sales from "./Sales";
-import { sellingProductsTableCreation } from "./testHelper";
 
 const user = userEvent.setup();
 
