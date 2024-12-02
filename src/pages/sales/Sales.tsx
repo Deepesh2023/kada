@@ -27,6 +27,10 @@ export default function Sales() {
     testStore.newSaleForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
+    if (testStore.newSaleForm.productName.trim().length === 0) {
+      return;
+    }
+
     const newSellingProduct: SellingProcduct = {
       productName: testStore.newSaleForm.productName,
       quantity: testStore.newSaleForm.quantity,
@@ -69,7 +73,7 @@ export default function Sales() {
 
   function inputHandler() {
     return (e: InputEvent) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target as HTMLInputElement;
 
       setTestStore("newSaleForm", (currentNewSaleForm) => {
         return {
@@ -108,7 +112,6 @@ export default function Sales() {
               name="productName"
               value={testStore.newSaleForm.productName}
               oninput={inputHandler()}
-              required
               data-testid="product-name-input"
             />
             <datalist id="product-list">
