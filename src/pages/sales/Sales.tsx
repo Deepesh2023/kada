@@ -1,5 +1,5 @@
 import { Show, For, createSignal } from "solid-js";
-import { createStore, reconcile } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { SellingProcduct } from "../../types";
 
 import "./sales.css";
@@ -41,14 +41,14 @@ export default function Sales() {
     );
 
     setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
-      return { ...currentNewSaleForm, productName: "", quantity: 1, price: 0 };
+      return { productName: "", quantity: 1, price: 0 };
     });
   }
 
   function deleteSellingProduct(index: number) {
     return () => {
       setNewSaleSession("sellingProducts", (currentSellingProducts) =>
-        currentSellingProducts.filter((currentSellingProduct, i) => i !== index)
+        currentSellingProducts.splice(index, 1)
       );
     };
   }
@@ -59,7 +59,6 @@ export default function Sales() {
 
       setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
         return {
-          ...currentNewSaleForm,
           productName: newSaleSession.sellingProducts[index].productName,
           price: newSaleSession.sellingProducts[index].price,
           quantity: newSaleSession.sellingProducts[index].quantity,
@@ -76,7 +75,6 @@ export default function Sales() {
 
       setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
         return {
-          ...currentNewSaleForm,
           [name]: Number(value) ? Number(value) : value,
         };
       });
