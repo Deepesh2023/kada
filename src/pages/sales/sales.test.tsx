@@ -174,4 +174,22 @@ describe("The Sales page", () => {
 
     expect(tableRows.length).toBe(3);
   });
+
+  test("Can cancel a session", async () => {
+    const { getByRole, getByTestId, queryByTestId } = render(() => <Sales />);
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    let newSaleFormDiv = getByTestId("new-sale-form");
+    expect(newSaleFormDiv).toBeVisible();
+
+    const cancelButton = getByRole("button", { name: "Cancel" });
+    await user.click(cancelButton);
+
+    expect(queryByTestId("new-sale-form")).not.toBeInTheDocument();
+  });
 });
