@@ -40,8 +40,10 @@ export default function Sales() {
       newSellingProduct
     );
 
-    setNewSaleSession("newSaleForm", () => {
-      return { productName: "", quantity: 1, price: 0 };
+    setNewSaleSession("newSaleForm", {
+      productName: "",
+      quantity: 1,
+      price: 0,
     });
   }
 
@@ -57,12 +59,10 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setNewSaleSession("newSaleForm", () => {
-        return {
-          productName: newSaleSession.sellingProducts[index].productName,
-          price: newSaleSession.sellingProducts[index].price,
-          quantity: newSaleSession.sellingProducts[index].quantity,
-        };
+      setNewSaleSession("newSaleForm", {
+        productName: newSaleSession.sellingProducts[index].productName,
+        price: newSaleSession.sellingProducts[index].price,
+        quantity: newSaleSession.sellingProducts[index].quantity,
       });
 
       deleteAction();
@@ -73,17 +73,14 @@ export default function Sales() {
     return (e: InputEvent) => {
       const { name, value } = e.target as HTMLInputElement;
 
-      setNewSaleSession("newSaleForm", () => {
-        return {
-          [name]: Number(value) ? Number(value) : value,
-        };
+      setNewSaleSession("newSaleForm", {
+        [name]: Number(value) ? Number(value) : value,
       });
     };
   }
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
-    console.log(newSaleSession);
   }
 
   return (
@@ -218,12 +215,11 @@ export default function Sales() {
                 id="do-not-record"
                 checked={newSaleSession.newSaleForm.doNotRecord}
                 onclick={() =>
-                  setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
-                    return {
-                      ...currentNewSaleForm,
-                      doNotRecord: !currentNewSaleForm.doNotRecord,
-                    };
-                  })
+                  setNewSaleSession(
+                    "newSaleForm",
+                    "doNotRecord",
+                    !newSaleSession.newSaleForm.doNotRecord
+                  )
                 }
               />
               <label>Do not include in records</label>
