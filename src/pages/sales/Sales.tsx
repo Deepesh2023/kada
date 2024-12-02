@@ -67,6 +67,19 @@ export default function Sales() {
     };
   }
 
+  function inputHandler() {
+    return (e: InputEvent) => {
+      const { name, value } = e.target;
+
+      setTestStore("newSaleForm", (currentNewSaleForm) => {
+        return {
+          ...currentNewSaleForm,
+          [name]: Number(value) ? Number(value) : value,
+        };
+      });
+    };
+  }
+
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
   }
@@ -92,12 +105,9 @@ export default function Sales() {
               type="text"
               list="product-list"
               id="product-name"
+              name="productName"
               value={testStore.newSaleForm.productName}
-              oninput={(e) =>
-                setTestStore("newSaleForm", (currentNewSaleForm) => {
-                  return { ...currentNewSaleForm, productName: e.target.value };
-                })
-              }
+              oninput={inputHandler()}
               required
               data-testid="product-name-input"
             />
@@ -110,15 +120,9 @@ export default function Sales() {
             <input
               type="number"
               id="product-quantity"
+              name="quantity"
               value={testStore.newSaleForm.quantity}
-              oninput={(e) => {
-                setTestStore("newSaleForm", (currentNewSaleForm) => {
-                  return {
-                    ...currentNewSaleForm,
-                    quantity: Number(e.target.value),
-                  };
-                });
-              }}
+              oninput={inputHandler()}
               min={1}
               onfocus={(e) => e.target.select()}
               required
@@ -129,15 +133,9 @@ export default function Sales() {
             <input
               type="number"
               id="product-price"
+              name="price"
               value={testStore.newSaleForm.price}
-              oninput={(e) => {
-                setTestStore("newSaleForm", (currentNewSaleForm) => {
-                  return {
-                    ...currentNewSaleForm,
-                    price: Number(e.target.value),
-                  };
-                });
-              }}
+              oninput={inputHandler()}
               required
               min={0}
               data-testid="product-price-input"
@@ -203,26 +201,17 @@ export default function Sales() {
               <input
                 type="text"
                 id="customer-name"
+                name="customerName"
                 value={testStore.newSaleForm.customerName}
-                oninput={(e) =>
-                  setTestStore("newSaleForm", (currentNewSaleForm) => {
-                    return {
-                      ...currentNewSaleForm,
-                      customerName: e.target.value,
-                    };
-                  })
-                }
+                oninput={inputHandler()}
               />
 
               <label for="remarks">Remarks</label>
               <textarea
                 id="remarks"
+                name="remarks"
                 value={testStore.newSaleForm.remarks}
-                oninput={(e) =>
-                  setTestStore("newSaleForm", (currentNewSaleForm) => {
-                    return { ...currentNewSaleForm, remarks: e.target.value };
-                  })
-                }
+                oninput={inputHandler()}
               ></textarea>
 
               <input
