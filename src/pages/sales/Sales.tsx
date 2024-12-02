@@ -40,7 +40,7 @@ export default function Sales() {
       newSellingProduct
     );
 
-    setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
+    setNewSaleSession("newSaleForm", () => {
       return { productName: "", quantity: 1, price: 0 };
     });
   }
@@ -57,7 +57,7 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
+      setNewSaleSession("newSaleForm", () => {
         return {
           productName: newSaleSession.sellingProducts[index].productName,
           price: newSaleSession.sellingProducts[index].price,
@@ -73,7 +73,7 @@ export default function Sales() {
     return (e: InputEvent) => {
       const { name, value } = e.target as HTMLInputElement;
 
-      setNewSaleSession("newSaleForm", (currentNewSaleForm) => {
+      setNewSaleSession("newSaleForm", () => {
         return {
           [name]: Number(value) ? Number(value) : value,
         };
