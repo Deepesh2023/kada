@@ -1,5 +1,5 @@
 import { Show, For, createSignal } from "solid-js";
-import { createStore, reconcile } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { SellingProcduct } from "../../types";
 
 import "./sales.css";
@@ -83,6 +83,9 @@ export default function Sales() {
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
+
+    setNewSaleSession("newSaleForm", intialNewSaleForm);
+    setNewSaleSession("sellingProducts", []);
   }
 
   function cancelSale() {
@@ -101,6 +104,8 @@ export default function Sales() {
       setNewSaleSession("sellingProducts", []);
       setShowNewSession(false);
     }
+
+    return;
   }
 
   return (
