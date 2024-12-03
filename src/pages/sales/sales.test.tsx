@@ -1,4 +1,4 @@
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, vi } from "vitest";
 import { render } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
@@ -191,5 +191,32 @@ describe("The Sales page", () => {
     await user.click(cancelButton);
 
     expect(queryByTestId("new-sale-form")).not.toBeInTheDocument();
+  });
+
+  test("cannot cancel without confirmation when there is one or more selling products on the table", async () => {
+    const { getByRole, getByTestId } = render(() => <Sales />);
+    window.confirm = vi.fn();
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    const productNameInput = getByTestId("product-name-input");
+    const productQuantityInput = getByTestId("product-quantity-input");
+    const productPriceInput = getByTestId("product-price-input");
+    const addProductButton = getByRole("button", { name: "Add" });
+
+    await user.type(productNameInput, "Candy");
+    await user.type(productQuantityInput, "5");
+    await user.type(productPriceInput, "3");
+
+    await user.click(addProductButton);
+
+    const cancelButton = getByRole("button", { name: "Cancel" });
+    await user.click(cancelButton);
+
+    expect(window.confirm).toBeCalledTimes(1);
   });
 });
