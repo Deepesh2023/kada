@@ -184,7 +184,7 @@ export default function Sales() {
 
                 <For each={newSaleSession.sellingProducts}>
                   {(sellingProduct, index) => (
-                    <tr data-testid="selling-product-row">
+                    <tr>
                       <td>{index() + 1}</td>
                       <td>{sellingProduct.productName}</td>
                       <td>{sellingProduct.price}</td>

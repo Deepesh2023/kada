@@ -25,7 +25,7 @@ describe("The Sales page", () => {
   });
 
   test("Can input values into the fields and clicking on the 'Add' button adds a new selling product", async () => {
-    const { getByRole, getByTestId } = render(() => <Sales />);
+    const { getByRole, getByTestId, getAllByRole } = render(() => <Sales />);
 
     const newSessionButton = getByRole("button", {
       name: "New session",
@@ -44,9 +44,24 @@ describe("The Sales page", () => {
     const addButton = getByRole("button", { name: "Add" });
     await user.click(addButton);
 
-    const sellingProductOnTable = getByTestId("selling-product-row");
+    const tableRows = getAllByRole("row");
+    expect(tableRows.length).toBe(3);
+  });
 
-    expect(sellingProductOnTable).toBeVisible();
+  test("cannot add a selling product on blank product name", async () => {
+    const { getByRole, getAllByRole } = render(() => <Sales />);
+
+    const newSessionButton = getByRole("button", {
+      name: "New session",
+    });
+
+    await user.click(newSessionButton);
+
+    const addProductButton = getByRole("button", { name: "Add" });
+    await user.click(addProductButton);
+
+    const tableRows = getAllByRole("row");
+    expect(tableRows.length).toBe(2);
   });
 
   test("Can add multiple products to the table", async () => {
