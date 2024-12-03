@@ -22,6 +22,7 @@ export interface NavLinkPropType {
 
 export interface SellingProcduct {
   productName: string;
+  serial: string;
   quantity: number;
   price: number;
 }
@@ -37,4 +38,11 @@ export interface newSaleFormType {
   customerName: string;
   remarks: string;
   doNotRecord: boolean;
+}
+
+export interface ProductOnStock {
+  serial: string;
+  name: string;
+  stocks: number;
+  mrp: number;
 }

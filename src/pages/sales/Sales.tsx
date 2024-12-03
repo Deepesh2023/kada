@@ -1,13 +1,15 @@
-import { Show, For, createSignal } from "solid-js";
+import { Show, For, createSignal, onMount, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
-import { SellingProcduct } from "../../types";
+import { ProductOnStock, SellingProcduct } from "../../types";
 
 import "./sales.css";
+import { getAllProductsOnStock } from "../../services/kadaServices";
 
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
   const intialNewSaleForm = {
+    serial: "",
     productName: "",
     price: 0,
     quantity: 1,
@@ -20,6 +22,13 @@ export default function Sales() {
     sellingProducts: new Array<SellingProcduct>(),
     newSaleForm: intialNewSaleForm,
   });
+
+  let productsOnStock: ProductOnStock[] = [];
+  onMount(() => {
+    productsOnStock = getAllProductsOnStock();
+  });
+
+  createEffect(() => {});
 
   const totalPrice = () =>
     newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
@@ -34,6 +43,7 @@ export default function Sales() {
       productName: newSaleSession.newSaleForm.productName.trim(),
       quantity: newSaleSession.newSaleForm.quantity,
       price: newSaleSession.newSaleForm.price,
+      serial: newSaleSession.newSaleForm.serial,
     };
 
     setNewSaleSession(
@@ -75,6 +85,16 @@ export default function Sales() {
   function inputHandler() {
     return (e: InputEvent) => {
       const { name, value } = e.target as HTMLInputElement;
+
+      if (name === "productName") {
+        const [productName, serial] = value.split(",");
+        setNewSaleSession("newSaleForm", {
+          productName: productName,
+          serial: serial,
+        });
+
+        return;
+      }
 
       setNewSaleSession("newSaleForm", {
         [name]: Number(value) ? Number(value) : value,
@@ -134,8 +154,13 @@ export default function Sales() {
               data-testid="product-name-input"
             />
             <datalist id="product-list">
-              <option value="torch">Torch</option>
-              <option value="battery">battery</option>
+              <For each={productsOnStock}>
+                {(productOnStock) => (
+                  <option
+                    value={`${productOnStock.name}, ${productOnStock.serial}`}
+                  ></option>
+                )}
+              </For>
             </datalist>
 
             <label for="product-quantity">Quantity</label>
@@ -176,6 +201,7 @@ export default function Sales() {
               <tbody>
                 <tr>
                   <th>No</th>
+                  <th>Serial</th>
                   <th>Product name</th>
                   <th>Price</th>
                   <th>Quantity</th>
@@ -186,6 +212,7 @@ export default function Sales() {
                   {(sellingProduct, index) => (
                     <tr>
                       <td>{index() + 1}</td>
+                      <td>{sellingProduct.serial}</td>
                       <td>{sellingProduct.productName}</td>
                       <td>{sellingProduct.price}</td>
                       <td>{sellingProduct.quantity}</td>
