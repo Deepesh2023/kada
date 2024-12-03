@@ -8,11 +8,14 @@ import { getAllProductsOnStock } from "../../services/kadaServices";
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
-  const intialNewSaleForm = {
+  const [sellingProductForm, setSellingProductForm] = createStore({
     serial: "",
     productName: "",
     price: 0,
     quantity: 1,
+  });
+
+  const intialNewSaleForm = {
     customerName: "",
     remarks: "",
     doNotRecord: false,
@@ -36,14 +39,14 @@ export default function Sales() {
     }, 0);
 
   const disableAddSellingProductButton = () =>
-    newSaleSession.newSaleForm.productName.length === 0 ? true : false;
+    sellingProductForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
-      productName: newSaleSession.newSaleForm.productName.trim(),
-      quantity: newSaleSession.newSaleForm.quantity,
-      price: newSaleSession.newSaleForm.price,
-      serial: newSaleSession.newSaleForm.serial,
+      productName: sellingProductForm.productName.trim(),
+      quantity: sellingProductForm.quantity,
+      price: sellingProductForm.price,
+      serial: sellingProductForm.serial,
     };
 
     setNewSaleSession(
@@ -52,7 +55,7 @@ export default function Sales() {
       newSellingProduct
     );
 
-    setNewSaleSession("newSaleForm", {
+    setSellingProductForm({
       productName: "",
       quantity: 1,
       price: 0,
@@ -72,7 +75,7 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setNewSaleSession("newSaleForm", {
+      setSellingProductForm({
         productName: newSaleSession.sellingProducts[index].productName,
         price: newSaleSession.sellingProducts[index].price,
         quantity: newSaleSession.sellingProducts[index].quantity,
@@ -88,7 +91,7 @@ export default function Sales() {
 
       if (name === "productName") {
         const [productName, serial] = value.split(",");
-        setNewSaleSession("newSaleForm", {
+        setSellingProductForm({
           productName: productName,
           serial: serial,
         });
@@ -149,8 +152,13 @@ export default function Sales() {
               list="product-list"
               id="product-name"
               name="productName"
-              value={newSaleSession.newSaleForm.productName}
-              oninput={inputHandler()}
+              value={sellingProductForm.productName}
+              oninput={(e) => {
+                setSellingProductForm(
+                  "productName",
+                  e.target.value.split(",")[0]
+                );
+              }}
               data-testid="product-name-input"
             />
             <datalist id="product-list">
@@ -168,8 +176,10 @@ export default function Sales() {
               type="number"
               id="product-quantity"
               name="quantity"
-              value={newSaleSession.newSaleForm.quantity}
-              oninput={inputHandler()}
+              value={sellingProductForm.quantity}
+              oninput={(e) =>
+                setSellingProductForm("quantity", Number(e.target.value))
+              }
               min={1}
               onfocus={(e) => e.target.select()}
               required
@@ -181,8 +191,10 @@ export default function Sales() {
               type="number"
               id="product-price"
               name="price"
-              value={newSaleSession.newSaleForm.price}
-              oninput={inputHandler()}
+              value={sellingProductForm.price}
+              oninput={(e) =>
+                setSellingProductForm("price", Number(e.target.value))
+              }
               required
               min={0}
               data-testid="product-price-input"
