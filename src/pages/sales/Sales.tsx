@@ -1,4 +1,4 @@
-import { Show, For, createSignal, onMount } from "solid-js";
+import { Show, For, createSignal, onMount, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Product } from "../../types";
 
@@ -10,7 +10,7 @@ export default function Sales() {
 
   const initialSellingProductForm = {
     serial: "",
-    productName: "",
+    name: "",
     price: 0,
     quantity: 1,
   };
@@ -32,18 +32,30 @@ export default function Sales() {
     productsOnStock = getAllProductsOnStock();
   });
 
+  // createEffect(() => {
+  //   const sellingProudct = productsOnStock.find(
+  //     (productOnStock) =>
+  //       productOnStock.serial ===
+  //       newSaleSession.sellingProductForm.name.split(",")[1]
+  //   );
+
+  //   if (sellingProudct) {
+  //     setNewSaleSession("sellingProductForm", "price", sellingProudct.price);
+  //   }
+  // });
+
   const totalPrice = () =>
     newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
       return (total += sellingProduct.price * sellingProduct.quantity);
     }, 0);
 
   const disableAddSellingProductButton = () =>
-    newSaleSession.sellingProductForm.productName.length === 0 ? true : false;
+    newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
   function addSellingProduct() {
     const newSellingProduct: Product = {
       serial: newSaleSession.sellingProductForm.serial,
-      name: newSaleSession.sellingProductForm.productName.trim(),
+      name: newSaleSession.sellingProductForm.name.trim(),
       quantity: newSaleSession.sellingProductForm.quantity,
       price: newSaleSession.sellingProductForm.price,
     };
@@ -71,7 +83,7 @@ export default function Sales() {
       const deleteAction = deleteSellingProduct(index);
 
       setNewSaleSession("sellingProductForm", {
-        productName: newSaleSession.sellingProducts[index].name,
+        name: newSaleSession.sellingProducts[index].name,
         price: newSaleSession.sellingProducts[index].price,
         quantity: newSaleSession.sellingProducts[index].quantity,
       });
@@ -87,7 +99,7 @@ export default function Sales() {
       if (name === "productName") {
         const [productName, serial] = value.split(",");
         setNewSaleSession("sellingProductForm", {
-          productName: productName,
+          name: productName,
           serial: serial,
         });
 
@@ -151,11 +163,11 @@ export default function Sales() {
               list="product-list"
               id="product-name"
               name="productName"
-              value={newSaleSession.sellingProductForm.productName}
+              value={newSaleSession.sellingProductForm.name}
               oninput={(e) => {
                 setNewSaleSession(
                   "sellingProductForm",
-                  "productName",
+                  "name",
                   e.target.value.split(",")[0]
                 );
               }}
