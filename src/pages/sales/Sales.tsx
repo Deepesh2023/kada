@@ -32,17 +32,15 @@ export default function Sales() {
     productsOnStock = getAllProductsOnStock();
   });
 
-  // createEffect(() => {
-  //   const sellingProudct = productsOnStock.find(
-  //     (productOnStock) =>
-  //       productOnStock.serial ===
-  //       newSaleSession.sellingProductForm.name.split(",")[1]
-  //   );
+  createEffect(() => {
+    const product = productsOnStock.find(
+      (productOnStock) =>
+        productOnStock.serial ===
+        newSaleSession.sellingProductForm.serial.trim()
+    );
 
-  //   if (sellingProudct) {
-  //     setNewSaleSession("sellingProductForm", "price", sellingProudct.price);
-  //   }
-  // });
+    setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
+  });
 
   const totalPrice = () =>
     newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
@@ -56,6 +54,7 @@ export default function Sales() {
     const newSellingProduct: Product = {
       serial: newSaleSession.sellingProductForm.serial,
       name: newSaleSession.sellingProductForm.name.trim(),
+      mrp: newSaleSession.sellingProductForm.price,
       quantity: newSaleSession.sellingProductForm.quantity,
       price: newSaleSession.sellingProductForm.price,
     };
@@ -143,6 +142,17 @@ export default function Sales() {
     return;
   }
 
+  function sellingProductNameInput(e: InputEvent) {
+    const { value } = e.target as HTMLInputElement;
+
+    const [name, serial] = value.split(",");
+
+    if (serial) {
+      setNewSaleSession("sellingProductForm", { name, serial });
+      return;
+    }
+  }
+
   return (
     <>
       <h2>Sales</h2>
@@ -164,13 +174,7 @@ export default function Sales() {
               id="product-name"
               name="productName"
               value={newSaleSession.sellingProductForm.name}
-              oninput={(e) => {
-                setNewSaleSession(
-                  "sellingProductForm",
-                  "name",
-                  e.target.value.split(",")[0]
-                );
-              }}
+              oninput={sellingProductNameInput}
               data-testid="product-name-input"
             />
             <datalist id="product-list">

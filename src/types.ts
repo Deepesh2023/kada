@@ -23,6 +23,7 @@ export interface NavLinkPropType {
 export interface Product {
   name: string;
   serial: string;
+  mrp: number;
   quantity: number;
   price: number;
 }
