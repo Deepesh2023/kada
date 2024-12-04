@@ -1,6 +1,6 @@
 import { Show, For, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { ProductOnStock, SellingProcduct } from "../../types";
+import { Product } from "../../types";
 
 import "./sales.css";
 import { getAllProductsOnStock } from "../../services/kadaServices";
@@ -23,11 +23,11 @@ export default function Sales() {
 
   const [newSaleSession, setNewSaleSession] = createStore({
     sellingProductForm: initialSellingProductForm,
-    sellingProducts: new Array<SellingProcduct>(),
+    sellingProducts: new Array<Product>(),
     additionalSaleDetails: intialAdditionalSaleDetails,
   });
 
-  let productsOnStock: ProductOnStock[] = [];
+  let productsOnStock: Product[] = [];
   onMount(() => {
     productsOnStock = getAllProductsOnStock();
   });
@@ -41,9 +41,9 @@ export default function Sales() {
     newSaleSession.sellingProductForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
-    const newSellingProduct: SellingProcduct = {
+    const newSellingProduct: Product = {
       serial: newSaleSession.sellingProductForm.serial,
-      productName: newSaleSession.sellingProductForm.productName.trim(),
+      name: newSaleSession.sellingProductForm.productName.trim(),
       quantity: newSaleSession.sellingProductForm.quantity,
       price: newSaleSession.sellingProductForm.price,
     };
@@ -71,7 +71,7 @@ export default function Sales() {
       const deleteAction = deleteSellingProduct(index);
 
       setNewSaleSession("sellingProductForm", {
-        productName: newSaleSession.sellingProducts[index].productName,
+        productName: newSaleSession.sellingProducts[index].name,
         price: newSaleSession.sellingProducts[index].price,
         quantity: newSaleSession.sellingProducts[index].quantity,
       });
@@ -234,7 +234,7 @@ export default function Sales() {
                     <tr>
                       <td>{index() + 1}</td>
                       <td>{sellingProduct.serial}</td>
-                      <td>{sellingProduct.productName}</td>
+                      <td>{sellingProduct.name}</td>
                       <td>{sellingProduct.price}</td>
                       <td>{sellingProduct.quantity}</td>
                       <td>{sellingProduct.price * sellingProduct.quantity}</td>
