@@ -1,4 +1,4 @@
-import { Show, For, createSignal, onMount, createEffect } from "solid-js";
+import { Show, For, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { ProductOnStock, SellingProcduct } from "../../types";
 
@@ -8,22 +8,23 @@ import { getAllProductsOnStock } from "../../services/kadaServices";
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
-  const [sellingProductForm, setSellingProductForm] = createStore({
+  const initialSellingProductForm = {
     serial: "",
     productName: "",
     price: 0,
     quantity: 1,
-  });
+  };
 
-  const intialNewSaleForm = {
+  const intialAdditionalSaleDetails = {
     customerName: "",
     remarks: "",
     doNotRecord: false,
   };
 
   const [newSaleSession, setNewSaleSession] = createStore({
+    sellingProductForm: initialSellingProductForm,
     sellingProducts: new Array<SellingProcduct>(),
-    newSaleForm: intialNewSaleForm,
+    additionalSaleDetails: intialAdditionalSaleDetails,
   });
 
   let productsOnStock: ProductOnStock[] = [];
@@ -31,22 +32,20 @@ export default function Sales() {
     productsOnStock = getAllProductsOnStock();
   });
 
-  createEffect(() => {});
-
   const totalPrice = () =>
     newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
       return (total += sellingProduct.price * sellingProduct.quantity);
     }, 0);
 
   const disableAddSellingProductButton = () =>
-    sellingProductForm.productName.length === 0 ? true : false;
+    newSaleSession.sellingProductForm.productName.length === 0 ? true : false;
 
   function addSellingProduct() {
     const newSellingProduct: SellingProcduct = {
-      productName: sellingProductForm.productName.trim(),
-      quantity: sellingProductForm.quantity,
-      price: sellingProductForm.price,
-      serial: sellingProductForm.serial,
+      serial: newSaleSession.sellingProductForm.serial,
+      productName: newSaleSession.sellingProductForm.productName.trim(),
+      quantity: newSaleSession.sellingProductForm.quantity,
+      price: newSaleSession.sellingProductForm.price,
     };
 
     setNewSaleSession(
@@ -55,11 +54,7 @@ export default function Sales() {
       newSellingProduct
     );
 
-    setSellingProductForm({
-      productName: "",
-      quantity: 1,
-      price: 0,
-    });
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
   }
 
   function deleteSellingProduct(index: number) {
@@ -75,7 +70,7 @@ export default function Sales() {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      setSellingProductForm({
+      setNewSaleSession("sellingProductForm", {
         productName: newSaleSession.sellingProducts[index].productName,
         price: newSaleSession.sellingProducts[index].price,
         quantity: newSaleSession.sellingProducts[index].quantity,
@@ -91,7 +86,7 @@ export default function Sales() {
 
       if (name === "productName") {
         const [productName, serial] = value.split(",");
-        setSellingProductForm({
+        setNewSaleSession("sellingProductForm", {
           productName: productName,
           serial: serial,
         });
@@ -99,7 +94,7 @@ export default function Sales() {
         return;
       }
 
-      setNewSaleSession("newSaleForm", {
+      setNewSaleSession("additionalSaleDetails", {
         [name]: Number(value) ? Number(value) : value,
       });
     };
@@ -108,13 +103,15 @@ export default function Sales() {
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
 
-    setNewSaleSession("newSaleForm", intialNewSaleForm);
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
+    setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
     setNewSaleSession("sellingProducts", []);
   }
 
   function cancelSale() {
     if (newSaleSession.sellingProducts.length === 0) {
-      setNewSaleSession("newSaleForm", intialNewSaleForm);
+      setNewSaleSession("sellingProductForm", initialSellingProductForm);
+      setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
       setShowNewSession(false);
       return;
     }
@@ -124,8 +121,10 @@ export default function Sales() {
     );
 
     if (shouldCancel) {
-      setNewSaleSession("newSaleForm", intialNewSaleForm);
+      setNewSaleSession("sellingProductForm", initialSellingProductForm);
+      setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
       setNewSaleSession("sellingProducts", []);
+
       setShowNewSession(false);
     }
 
@@ -145,16 +144,17 @@ export default function Sales() {
 
           <hr />
 
-          <form onSubmit={submitSale} aria-label="new sale form">
+          <form onsubmit={submitSale} aria-label="new sale form">
             <label for="product-name">Select product</label>
             <input
               type="text"
               list="product-list"
               id="product-name"
               name="productName"
-              value={sellingProductForm.productName}
+              value={newSaleSession.sellingProductForm.productName}
               oninput={(e) => {
-                setSellingProductForm(
+                setNewSaleSession(
+                  "sellingProductForm",
                   "productName",
                   e.target.value.split(",")[0]
                 );
@@ -176,9 +176,13 @@ export default function Sales() {
               type="number"
               id="product-quantity"
               name="quantity"
-              value={sellingProductForm.quantity}
+              value={newSaleSession.sellingProductForm.quantity}
               oninput={(e) =>
-                setSellingProductForm("quantity", Number(e.target.value))
+                setNewSaleSession(
+                  "sellingProductForm",
+                  "quantity",
+                  Number(e.target.value)
+                )
               }
               min={1}
               onfocus={(e) => e.target.select()}
@@ -191,9 +195,13 @@ export default function Sales() {
               type="number"
               id="product-price"
               name="price"
-              value={sellingProductForm.price}
+              value={newSaleSession.sellingProductForm.price}
               oninput={(e) =>
-                setSellingProductForm("price", Number(e.target.value))
+                setNewSaleSession(
+                  "sellingProductForm",
+                  "price",
+                  Number(e.target.value)
+                )
               }
               required
               min={0}
@@ -201,6 +209,7 @@ export default function Sales() {
             />
 
             <button
+              type="button"
               onclick={addSellingProduct}
               disabled={disableAddSellingProductButton()}
             >
@@ -263,7 +272,7 @@ export default function Sales() {
                 type="text"
                 id="customer-name"
                 name="customerName"
-                value={newSaleSession.newSaleForm.customerName}
+                value={newSaleSession.additionalSaleDetails.customerName}
                 oninput={inputHandler()}
               />
 
@@ -271,19 +280,19 @@ export default function Sales() {
               <textarea
                 id="remarks"
                 name="remarks"
-                value={newSaleSession.newSaleForm.remarks}
+                value={newSaleSession.additionalSaleDetails.remarks}
                 oninput={inputHandler()}
               ></textarea>
 
               <input
                 type="checkbox"
                 id="do-not-record"
-                checked={newSaleSession.newSaleForm.doNotRecord}
+                checked={newSaleSession.additionalSaleDetails.doNotRecord}
                 onclick={() =>
                   setNewSaleSession(
-                    "newSaleForm",
+                    "additionalSaleDetails",
                     "doNotRecord",
-                    !newSaleSession.newSaleForm.doNotRecord
+                    !newSaleSession.additionalSaleDetails.doNotRecord
                   )
                 }
               />
