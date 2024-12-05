@@ -35,8 +35,7 @@ export default function Sales() {
   createEffect(() => {
     const product = productsOnStock.find(
       (productOnStock) =>
-        productOnStock.serial ===
-        newSaleSession.sellingProductForm.serial.trim()
+        productOnStock.serial === newSaleSession.sellingProductForm.serial
     );
 
     setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
@@ -65,7 +64,7 @@ export default function Sales() {
       newSellingProduct
     );
 
-    setNewSaleSession("sellingProductForm", initialSellingProductForm);
+    setNewSaleSession("sellingProductForm", { ...initialSellingProductForm });
   }
 
   function deleteSellingProduct(index: number) {
@@ -148,9 +147,15 @@ export default function Sales() {
     const [name, serial] = value.split(",");
 
     if (serial) {
-      setNewSaleSession("sellingProductForm", { name, serial });
+      setNewSaleSession("sellingProductForm", {
+        name: name.trim(),
+        serial: serial.trim(),
+      });
+
       return;
     }
+
+    setNewSaleSession("sellingProductForm", "name", name);
   }
 
   return (
