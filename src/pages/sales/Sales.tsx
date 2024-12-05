@@ -90,26 +90,6 @@ export default function Sales() {
     };
   }
 
-  function inputHandler() {
-    return (e: InputEvent) => {
-      const { name, value } = e.target as HTMLInputElement;
-
-      if (name === "productName") {
-        const [productName, serial] = value.split(",");
-        setNewSaleSession("sellingProductForm", {
-          name: productName,
-          serial: serial,
-        });
-
-        return;
-      }
-
-      setNewSaleSession("additionalSaleDetails", {
-        [name]: Number(value) ? Number(value) : value,
-      });
-    };
-  }
-
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
 
@@ -294,7 +274,13 @@ export default function Sales() {
                 id="customer-name"
                 name="customerName"
                 value={newSaleSession.additionalSaleDetails.customerName}
-                oninput={inputHandler()}
+                oninput={(e) =>
+                  setNewSaleSession(
+                    "additionalSaleDetails",
+                    "customerName",
+                    e.target.value
+                  )
+                }
               />
 
               <label for="remarks">Remarks</label>
@@ -302,7 +288,13 @@ export default function Sales() {
                 id="remarks"
                 name="remarks"
                 value={newSaleSession.additionalSaleDetails.remarks}
-                oninput={inputHandler()}
+                oninput={(e) =>
+                  setNewSaleSession(
+                    "additionalSaleDetails",
+                    "remarks",
+                    e.target.value
+                  )
+                }
               ></textarea>
 
               <input
