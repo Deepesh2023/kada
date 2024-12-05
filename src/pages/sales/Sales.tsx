@@ -1,6 +1,6 @@
 import { Show, For, createSignal, onMount, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Product } from "../../types";
+import { ProductOnStock, SellingProduct } from "../../types";
 
 import "./sales.css";
 import { getAllProductsOnStock } from "../../services/kadaServices";
@@ -23,11 +23,11 @@ export default function Sales() {
 
   const [newSaleSession, setNewSaleSession] = createStore({
     sellingProductForm: initialSellingProductForm,
-    sellingProducts: new Array<Product>(),
+    sellingProducts: new Array<SellingProduct>(),
     additionalSaleDetails: intialAdditionalSaleDetails,
   });
 
-  let productsOnStock: Product[] = [];
+  let productsOnStock: ProductOnStock[] = [];
   onMount(() => {
     productsOnStock = getAllProductsOnStock();
   });
@@ -50,10 +50,9 @@ export default function Sales() {
     newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
   function addSellingProduct() {
-    const newSellingProduct: Product = {
+    const newSellingProduct: SellingProduct = {
       serial: newSaleSession.sellingProductForm.serial,
-      name: newSaleSession.sellingProductForm.name.trim(),
-      mrp: newSaleSession.sellingProductForm.price,
+      name: newSaleSession.sellingProductForm.name,
       quantity: newSaleSession.sellingProductForm.quantity,
       price: newSaleSession.sellingProductForm.price,
     };

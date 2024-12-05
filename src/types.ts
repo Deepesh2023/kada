@@ -20,16 +20,18 @@ export interface NavLinkPropType {
   setMenuVisibility: null | Setter<boolean>;
 }
 
-export interface Product {
+export interface ProductOnStock {
   name: string;
   serial: string;
   mrp: number;
-  quantity: number;
-  price: number;
+  stocks: number;
 }
 
-export interface NewSellingProductFormPropsType {
-  addSellingProduct: (sellingProduct: Product) => void;
+export interface SellingProduct {
+  serial: string;
+  name: string;
+  quantity: number;
+  price: number;
 }
 
 export interface newSaleFormType {
