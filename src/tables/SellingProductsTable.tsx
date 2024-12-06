@@ -1,37 +1,34 @@
-import { For } from "solid-js";
+import { For, useContext } from "solid-js";
 import { createEffect } from "solid-js";
 
-import { NewSaleSessionStoreType, ProductOnStock } from "../types";
-import { SetStoreFunction } from "solid-js/store";
+import { NewSaleSessionStoreContext, ProductOnStock } from "../types";
+import { StoreContext } from "../pages/sales/Sales";
 
-export default function SellingProductsTable(props: {
-  newSaleSession: NewSaleSessionStoreType;
-  setNewSaleSession: SetStoreFunction<NewSaleSessionStoreType>;
-}) {
+export default function SellingProductsTable() {
+  const { newSaleSession, setNewSaleSession } = useContext(
+    StoreContext
+  ) as NewSaleSessionStoreContext;
+
   let productsOnStock: ProductOnStock[] = [];
   createEffect(() => {
     const product = productsOnStock.find(
       (productOnStock) =>
-        productOnStock.serial === props.newSaleSession.sellingProductForm.serial
+        productOnStock.serial === newSaleSession.sellingProductForm.serial
     );
 
-    props.setNewSaleSession(
-      "sellingProductForm",
-      "price",
-      product ? product.mrp : 0
-    );
+    setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
   });
 
   const totalPrice = () =>
-    props.newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
+    newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
       return (total += sellingProduct.price * sellingProduct.quantity);
     }, 0);
 
   function deleteSellingProduct(index: number) {
     return () => {
-      props.setNewSaleSession(
+      setNewSaleSession(
         "sellingProducts",
-        props.newSaleSession.sellingProducts.toSpliced(index, 1)
+        newSaleSession.sellingProducts.toSpliced(index, 1)
       );
     };
   }
@@ -40,10 +37,10 @@ export default function SellingProductsTable(props: {
     return () => {
       const deleteAction = deleteSellingProduct(index);
 
-      props.setNewSaleSession("sellingProductForm", {
-        name: props.newSaleSession.sellingProducts[index].name,
-        price: props.newSaleSession.sellingProducts[index].price,
-        quantity: props.newSaleSession.sellingProducts[index].quantity,
+      setNewSaleSession("sellingProductForm", {
+        name: newSaleSession.sellingProducts[index].name,
+        price: newSaleSession.sellingProducts[index].price,
+        quantity: newSaleSession.sellingProducts[index].quantity,
       });
 
       deleteAction();
@@ -62,7 +59,7 @@ export default function SellingProductsTable(props: {
           <th>Price X quantity</th>
         </tr>
 
-        <For each={props.newSaleSession.sellingProducts}>
+        <For each={newSaleSession.sellingProducts}>
           {(sellingProduct, index) => (
             <tr>
               <td>{index() + 1}</td>

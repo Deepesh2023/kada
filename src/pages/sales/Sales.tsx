@@ -1,9 +1,14 @@
-import { Show, createSignal } from "solid-js";
+import { Show, createContext, createSignal } from "solid-js";
 
 import "./sales.css";
 import { getNewSaleSessionStore } from "../../stores/newSaleSession";
 
 import NewSaleSessionForm from "../../forms/NewSaleSessionForm";
+import { NewSaleSessionStoreContext } from "../../types";
+
+export const StoreContext = createContext<NewSaleSessionStoreContext | null>(
+  null
+);
 
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
@@ -22,11 +27,9 @@ export default function Sales() {
 
           <hr />
 
-          <NewSaleSessionForm
-            newSaleSession={newSaleSession}
-            setNewSaleSession={setNewSaleSession}
-            setShowNewSession={setShowNewSession}
-          />
+          <StoreContext.Provider value={{ newSaleSession, setNewSaleSession }}>
+            <NewSaleSessionForm setShowNewSession={setShowNewSession} />
+          </StoreContext.Provider>
         </div>
       </Show>
     </>

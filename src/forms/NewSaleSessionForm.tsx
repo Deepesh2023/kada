@@ -1,7 +1,6 @@
-import { onMount, For } from "solid-js";
+import { onMount, For, useContext } from "solid-js";
 
-import { SetStoreFunction } from "solid-js/store";
-import { NewSaleSessionStoreType } from "../types";
+import { NewSaleSessionStoreContext } from "../types";
 import { getAllProductsOnStock } from "../services/kadaServices";
 
 import {
@@ -13,29 +12,29 @@ import { ProductOnStock, SellingProduct } from "../types";
 
 import SellingProductsTable from "../tables/SellingProductsTable";
 import { Setter } from "solid-js/types/server/reactive.js";
+import { StoreContext } from "../pages/sales/Sales";
 
 export default function NewSaleSessionForm(props: {
-  newSaleSession: NewSaleSessionStoreType;
-  setNewSaleSession: SetStoreFunction<NewSaleSessionStoreType>;
   setShowNewSession: Setter<Boolean>;
 }) {
+  const { newSaleSession, setNewSaleSession } = useContext(
+    StoreContext
+  ) as NewSaleSessionStoreContext;
+
   let productsOnStock: ProductOnStock[] = [];
   onMount(() => {
     productsOnStock = getAllProductsOnStock();
   });
 
   const disableAddSellingProductButton = () =>
-    props.newSaleSession.sellingProductForm.name.length === 0 ? true : false;
+    newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
   function submitSale(e: SubmitEvent) {
     e.preventDefault();
 
-    props.setNewSaleSession("sellingProductForm", initialSellingProductForm);
-    props.setNewSaleSession(
-      "additionalSaleDetails",
-      intialAdditionalSaleDetails
-    );
-    props.setNewSaleSession("sellingProducts", []);
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
+    setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
+    setNewSaleSession("sellingProducts", []);
   }
 
   function sellingProductNameInput(e: InputEvent) {
@@ -44,7 +43,7 @@ export default function NewSaleSessionForm(props: {
     const [name, serial] = value.split(",");
 
     if (serial) {
-      props.setNewSaleSession("sellingProductForm", {
+      setNewSaleSession("sellingProductForm", {
         name: name.trim(),
         serial: serial.trim(),
       });
@@ -52,30 +51,27 @@ export default function NewSaleSessionForm(props: {
       return;
     }
 
-    props.setNewSaleSession("sellingProductForm", "name", name);
+    setNewSaleSession("sellingProductForm", "name", name);
   }
 
   function addSellingProduct() {
     const newSellingProduct: SellingProduct = {
-      ...props.newSaleSession.sellingProductForm,
+      ...newSaleSession.sellingProductForm,
     };
 
-    props.setNewSaleSession(
+    setNewSaleSession(
       "sellingProducts",
-      props.newSaleSession.sellingProducts.length,
+      newSaleSession.sellingProducts.length,
       newSellingProduct
     );
 
-    props.setNewSaleSession("sellingProductForm", initialSellingProductForm);
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
   }
 
   function cancelSale() {
-    if (props.newSaleSession.sellingProducts.length === 0) {
-      props.setNewSaleSession("sellingProductForm", initialSellingProductForm);
-      props.setNewSaleSession(
-        "additionalSaleDetails",
-        intialAdditionalSaleDetails
-      );
+    if (newSaleSession.sellingProducts.length === 0) {
+      setNewSaleSession("sellingProductForm", initialSellingProductForm);
+      setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
       props.setShowNewSession(false);
       return;
     }
@@ -85,12 +81,9 @@ export default function NewSaleSessionForm(props: {
     );
 
     if (shouldCancel) {
-      props.setNewSaleSession("sellingProductForm", initialSellingProductForm);
-      props.setNewSaleSession(
-        "additionalSaleDetails",
-        intialAdditionalSaleDetails
-      );
-      props.setNewSaleSession("sellingProducts", []);
+      setNewSaleSession("sellingProductForm", initialSellingProductForm);
+      setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
+      setNewSaleSession("sellingProducts", []);
 
       props.setShowNewSession(false);
     }
@@ -106,7 +99,7 @@ export default function NewSaleSessionForm(props: {
         list="product-list"
         id="product-name"
         name="productName"
-        value={props.newSaleSession.sellingProductForm.name}
+        value={newSaleSession.sellingProductForm.name}
         oninput={sellingProductNameInput}
         data-testid="product-name-input"
       />
@@ -125,9 +118,9 @@ export default function NewSaleSessionForm(props: {
         type="number"
         id="product-quantity"
         name="quantity"
-        value={props.newSaleSession.sellingProductForm.quantity}
+        value={newSaleSession.sellingProductForm.quantity}
         oninput={(e) =>
-          props.setNewSaleSession(
+          setNewSaleSession(
             "sellingProductForm",
             "quantity",
             Number(e.target.value)
@@ -144,9 +137,9 @@ export default function NewSaleSessionForm(props: {
         type="number"
         id="product-price"
         name="price"
-        value={props.newSaleSession.sellingProductForm.price}
+        value={newSaleSession.sellingProductForm.price}
         oninput={(e) =>
-          props.setNewSaleSession(
+          setNewSaleSession(
             "sellingProductForm",
             "price",
             Number(e.target.value)
@@ -167,10 +160,7 @@ export default function NewSaleSessionForm(props: {
 
       <hr />
 
-      <SellingProductsTable
-        newSaleSession={props.newSaleSession}
-        setNewSaleSession={props.setNewSaleSession}
-      />
+      <SellingProductsTable />
 
       <hr />
 
@@ -182,9 +172,9 @@ export default function NewSaleSessionForm(props: {
           type="text"
           id="customer-name"
           name="customerName"
-          value={props.newSaleSession.additionalSaleDetails.customerName}
+          value={newSaleSession.additionalSaleDetails.customerName}
           oninput={(e) =>
-            props.setNewSaleSession(
+            setNewSaleSession(
               "additionalSaleDetails",
               "customerName",
               e.target.value
@@ -196,9 +186,9 @@ export default function NewSaleSessionForm(props: {
         <textarea
           id="remarks"
           name="remarks"
-          value={props.newSaleSession.additionalSaleDetails.remarks}
+          value={newSaleSession.additionalSaleDetails.remarks}
           oninput={(e) =>
-            props.setNewSaleSession(
+            setNewSaleSession(
               "additionalSaleDetails",
               "remarks",
               e.target.value
@@ -209,12 +199,12 @@ export default function NewSaleSessionForm(props: {
         <input
           type="checkbox"
           id="do-not-record"
-          checked={props.newSaleSession.additionalSaleDetails.doNotRecord}
+          checked={newSaleSession.additionalSaleDetails.doNotRecord}
           onclick={() =>
-            props.setNewSaleSession(
+            setNewSaleSession(
               "additionalSaleDetails",
               "doNotRecord",
-              !props.newSaleSession.additionalSaleDetails.doNotRecord
+              !newSaleSession.additionalSaleDetails.doNotRecord
             )
           }
         />

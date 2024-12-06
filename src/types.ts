@@ -1,4 +1,5 @@
 import { Accessor, Setter, JSX } from "solid-js";
+import { SetStoreFunction } from "solid-js/store";
 
 export interface DialogBoxTypes {
   isDialogVisible: Accessor<boolean>;
@@ -53,4 +54,9 @@ export interface NewSaleSessionStoreType {
   sellingProductForm: SellingProduct;
   sellingProducts: SellingProduct[];
   additionalSaleDetails: AdditionalSaleDetailsType;
+}
+
+export interface NewSaleSessionStoreContext {
+  newSaleSession: NewSaleSessionStoreType;
+  setNewSaleSession: SetStoreFunction<NewSaleSessionStoreType>;
 }
