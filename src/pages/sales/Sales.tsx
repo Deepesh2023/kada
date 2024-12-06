@@ -22,9 +22,9 @@ export default function Sales() {
   };
 
   const [newSaleSession, setNewSaleSession] = createStore({
-    sellingProductForm: initialSellingProductForm,
+    sellingProductForm: {...initialSellingProductForm},
     sellingProducts: new Array<SellingProduct>(),
-    additionalSaleDetails: intialAdditionalSaleDetails,
+    additionalSaleDetails: {...intialAdditionalSaleDetails},
   });
 
   let productsOnStock: ProductOnStock[] = [];
@@ -35,7 +35,7 @@ export default function Sales() {
   createEffect(() => {
     const product = productsOnStock.find(
       (productOnStock) =>
-        productOnStock.serial === newSaleSession.sellingProductForm.serial
+        productOnStock.serial === newSaleSession.sellingProductForm.serial,
     );
 
     setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
@@ -51,26 +51,24 @@ export default function Sales() {
 
   function addSellingProduct() {
     const newSellingProduct: SellingProduct = {
-      serial: newSaleSession.sellingProductForm.serial,
-      name: newSaleSession.sellingProductForm.name,
-      quantity: newSaleSession.sellingProductForm.quantity,
-      price: newSaleSession.sellingProductForm.price,
+      ...newSaleSession.sellingProductForm,
     };
 
     setNewSaleSession(
       "sellingProducts",
       newSaleSession.sellingProducts.length,
-      newSellingProduct
+      newSellingProduct,
     );
 
-    setNewSaleSession("sellingProductForm", { ...initialSellingProductForm });
+
+    setNewSaleSession("sellingProductForm", initialSellingProductForm );
   }
 
   function deleteSellingProduct(index: number) {
     return () => {
       setNewSaleSession(
         "sellingProducts",
-        newSaleSession.sellingProducts.toSpliced(index, 1)
+        newSaleSession.sellingProducts.toSpliced(index, 1),
       );
     };
   }
@@ -106,7 +104,7 @@ export default function Sales() {
     }
 
     const shouldCancel = window.confirm(
-      "Are you sure you want to cancel the sale?"
+      "Are you sure you want to cancel the sale?",
     );
 
     if (shouldCancel) {
@@ -181,7 +179,7 @@ export default function Sales() {
                 setNewSaleSession(
                   "sellingProductForm",
                   "quantity",
-                  Number(e.target.value)
+                  Number(e.target.value),
                 )
               }
               min={1}
@@ -200,7 +198,7 @@ export default function Sales() {
                 setNewSaleSession(
                   "sellingProductForm",
                   "price",
-                  Number(e.target.value)
+                  Number(e.target.value),
                 )
               }
               required
@@ -277,7 +275,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "customerName",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -291,7 +289,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "remarks",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               ></textarea>
@@ -304,7 +302,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "doNotRecord",
-                    !newSaleSession.additionalSaleDetails.doNotRecord
+                    !newSaleSession.additionalSaleDetails.doNotRecord,
                   )
                 }
               />
