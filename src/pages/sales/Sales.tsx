@@ -1,31 +1,18 @@
 import { Show, For, createSignal, onMount, createEffect } from "solid-js";
-import { createStore } from "solid-js/store";
 import { ProductOnStock, SellingProduct } from "../../types";
 
 import "./sales.css";
 import { getAllProductsOnStock } from "../../services/kadaServices";
+import {
+  getNewSaleSessionStore,
+  initialSellingProductForm,
+  intialAdditionalSaleDetails,
+} from "../../stores/newSaleSession";
 
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
-  const initialSellingProductForm = {
-    serial: "",
-    name: "",
-    price: 0,
-    quantity: 1,
-  };
-
-  const intialAdditionalSaleDetails = {
-    customerName: "",
-    remarks: "",
-    doNotRecord: false,
-  };
-
-  const [newSaleSession, setNewSaleSession] = createStore({
-    sellingProductForm: {...initialSellingProductForm},
-    sellingProducts: new Array<SellingProduct>(),
-    additionalSaleDetails: {...intialAdditionalSaleDetails},
-  });
+  const { newSaleSession, setNewSaleSession } = getNewSaleSessionStore();
 
   let productsOnStock: ProductOnStock[] = [];
   onMount(() => {
@@ -35,7 +22,7 @@ export default function Sales() {
   createEffect(() => {
     const product = productsOnStock.find(
       (productOnStock) =>
-        productOnStock.serial === newSaleSession.sellingProductForm.serial,
+        productOnStock.serial === newSaleSession.sellingProductForm.serial
     );
 
     setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
@@ -57,18 +44,17 @@ export default function Sales() {
     setNewSaleSession(
       "sellingProducts",
       newSaleSession.sellingProducts.length,
-      newSellingProduct,
+      newSellingProduct
     );
 
-
-    setNewSaleSession("sellingProductForm", initialSellingProductForm );
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
   }
 
   function deleteSellingProduct(index: number) {
     return () => {
       setNewSaleSession(
         "sellingProducts",
-        newSaleSession.sellingProducts.toSpliced(index, 1),
+        newSaleSession.sellingProducts.toSpliced(index, 1)
       );
     };
   }
@@ -104,7 +90,7 @@ export default function Sales() {
     }
 
     const shouldCancel = window.confirm(
-      "Are you sure you want to cancel the sale?",
+      "Are you sure you want to cancel the sale?"
     );
 
     if (shouldCancel) {
@@ -179,7 +165,7 @@ export default function Sales() {
                 setNewSaleSession(
                   "sellingProductForm",
                   "quantity",
-                  Number(e.target.value),
+                  Number(e.target.value)
                 )
               }
               min={1}
@@ -198,7 +184,7 @@ export default function Sales() {
                 setNewSaleSession(
                   "sellingProductForm",
                   "price",
-                  Number(e.target.value),
+                  Number(e.target.value)
                 )
               }
               required
@@ -275,7 +261,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "customerName",
-                    e.target.value,
+                    e.target.value
                   )
                 }
               />
@@ -289,7 +275,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "remarks",
-                    e.target.value,
+                    e.target.value
                   )
                 }
               ></textarea>
@@ -302,7 +288,7 @@ export default function Sales() {
                   setNewSaleSession(
                     "additionalSaleDetails",
                     "doNotRecord",
-                    !newSaleSession.additionalSaleDetails.doNotRecord,
+                    !newSaleSession.additionalSaleDetails.doNotRecord
                   )
                 }
               />
