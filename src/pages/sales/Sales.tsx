@@ -9,6 +9,8 @@ import {
   intialAdditionalSaleDetails,
 } from "../../stores/newSaleSession";
 
+import SellingProductsTable from "../../tables/SellingProductsTable";
+
 export default function Sales() {
   const [showNewSession, setShowNewSession] = createSignal(false);
 
@@ -28,11 +30,6 @@ export default function Sales() {
     setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
   });
 
-  const totalPrice = () =>
-    newSaleSession.sellingProducts.reduce((total, sellingProduct) => {
-      return (total += sellingProduct.price * sellingProduct.quantity);
-    }, 0);
-
   const disableAddSellingProductButton = () =>
     newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
@@ -48,29 +45,6 @@ export default function Sales() {
     );
 
     setNewSaleSession("sellingProductForm", initialSellingProductForm);
-  }
-
-  function deleteSellingProduct(index: number) {
-    return () => {
-      setNewSaleSession(
-        "sellingProducts",
-        newSaleSession.sellingProducts.toSpliced(index, 1)
-      );
-    };
-  }
-
-  function editSellingProduct(index: number) {
-    return () => {
-      const deleteAction = deleteSellingProduct(index);
-
-      setNewSaleSession("sellingProductForm", {
-        name: newSaleSession.sellingProducts[index].name,
-        price: newSaleSession.sellingProducts[index].price,
-        quantity: newSaleSession.sellingProducts[index].quantity,
-      });
-
-      deleteAction();
-    };
   }
 
   function submitSale(e: SubmitEvent) {
@@ -202,49 +176,10 @@ export default function Sales() {
 
             <hr />
 
-            <table>
-              <tbody>
-                <tr>
-                  <th>No</th>
-                  <th>Serial</th>
-                  <th>Product name</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Price X quantity</th>
-                </tr>
-
-                <For each={newSaleSession.sellingProducts}>
-                  {(sellingProduct, index) => (
-                    <tr>
-                      <td>{index() + 1}</td>
-                      <td>{sellingProduct.serial}</td>
-                      <td>{sellingProduct.name}</td>
-                      <td>{sellingProduct.price}</td>
-                      <td>{sellingProduct.quantity}</td>
-                      <td>{sellingProduct.price * sellingProduct.quantity}</td>
-
-                      <td>
-                        <button onclick={editSellingProduct(index())}>
-                          Edit
-                        </button>
-                      </td>
-                      <td>
-                        <button onclick={deleteSellingProduct(index())}>
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  )}
-                </For>
-              </tbody>
-
-              <tfoot>
-                <tr>
-                  <th colSpan={4}>Total: </th>
-                  <td>{totalPrice()}</td>
-                </tr>
-              </tfoot>
-            </table>
+            <SellingProductsTable
+              newSaleSession={newSaleSession}
+              setNewSaleSession={setNewSaleSession}
+            />
 
             <hr />
 
