@@ -42,3 +42,15 @@ export interface newSaleFormType {
   remarks: string;
   doNotRecord: boolean;
 }
+
+interface AdditionalSaleDetailsType {
+  customerName: string;
+  remarks: string;
+  doNotRecord: boolean;
+}
+
+export interface NewSaleSessionStoreType {
+  sellingProductForm: SellingProduct;
+  sellingProducts: SellingProduct[];
+  additionalSaleDetails: AdditionalSaleDetailsType;
+}

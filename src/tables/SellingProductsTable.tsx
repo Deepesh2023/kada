@@ -1,9 +1,13 @@
 import { For } from "solid-js";
 import { createEffect } from "solid-js";
 
-import { ProductOnStock } from "../types";
+import { NewSaleSessionStoreType, ProductOnStock } from "../types";
+import { SetStoreFunction } from "solid-js/store";
 
-export default function SellingProductsTable(props) {
+export default function SellingProductsTable(props: {
+  newSaleSession: NewSaleSessionStoreType;
+  setNewSaleSession: SetStoreFunction<NewSaleSessionStoreType>;
+}) {
   let productsOnStock: ProductOnStock[] = [];
   createEffect(() => {
     const product = productsOnStock.find(

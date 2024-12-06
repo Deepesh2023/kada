@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { SellingProduct } from "../types";
+import { SellingProduct, NewSaleSessionStoreType } from "../types";
 
 export const initialSellingProductForm = {
   serial: "",
@@ -15,11 +15,12 @@ export const intialAdditionalSaleDetails = {
 };
 
 export function getNewSaleSessionStore() {
-  const [newSaleSession, setNewSaleSession] = createStore({
-    sellingProductForm: { ...initialSellingProductForm },
-    sellingProducts: new Array<SellingProduct>(),
-    additionalSaleDetails: { ...intialAdditionalSaleDetails },
-  });
+  const [newSaleSession, setNewSaleSession] =
+    createStore<NewSaleSessionStoreType>({
+      sellingProductForm: { ...initialSellingProductForm },
+      sellingProducts: new Array<SellingProduct>(),
+      additionalSaleDetails: { ...intialAdditionalSaleDetails },
+    });
 
   return { newSaleSession, setNewSaleSession };
 }
