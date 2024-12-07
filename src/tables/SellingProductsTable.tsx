@@ -1,23 +1,12 @@
 import { For, useContext } from "solid-js";
-import { createEffect } from "solid-js";
 
-import { NewSaleSessionStoreContext, ProductOnStock } from "../types";
+import { NewSaleSessionStoreContext } from "../types";
 import { StoreContext } from "../pages/sales/Sales";
 
 export default function SellingProductsTable() {
   const { newSaleSession, setNewSaleSession } = useContext(
     StoreContext
   ) as NewSaleSessionStoreContext;
-
-  let productsOnStock: ProductOnStock[] = [];
-  createEffect(() => {
-    const product = productsOnStock.find(
-      (productOnStock) =>
-        productOnStock.serial === newSaleSession.sellingProductForm.serial
-    );
-
-    setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
-  });
 
   const totalPrice = () =>
     newSaleSession.sellingProducts.reduce((total, sellingProduct) => {

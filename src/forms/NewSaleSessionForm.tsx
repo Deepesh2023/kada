@@ -1,4 +1,4 @@
-import { onMount, For, useContext } from "solid-js";
+import { onMount, For, useContext, createEffect } from "solid-js";
 
 import { NewSaleSessionStoreContext } from "../types";
 import { getAllProductsOnStock } from "../services/kadaServices";
@@ -15,27 +15,28 @@ import { Setter } from "solid-js/types/server/reactive.js";
 import { StoreContext } from "../pages/sales/Sales";
 
 export default function NewSaleSessionForm(props: {
-  setShowNewSession: Setter<Boolean>;
+  setShowNewSession: Setter<boolean>;
 }) {
   const { newSaleSession, setNewSaleSession } = useContext(
     StoreContext
   ) as NewSaleSessionStoreContext;
 
   let productsOnStock: ProductOnStock[] = [];
-  onMount(() => {
+  onMount(async () => {
     productsOnStock = getAllProductsOnStock();
   });
 
   const disableAddSellingProductButton = () =>
     newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
-  function submitSale(e: SubmitEvent) {
-    e.preventDefault();
+  createEffect(() => {
+    const product = productsOnStock.find(
+      (productOnStock) =>
+        productOnStock.serial === newSaleSession.sellingProductForm.serial
+    );
 
-    setNewSaleSession("sellingProductForm", initialSellingProductForm);
-    setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
-    setNewSaleSession("sellingProducts", []);
-  }
+    setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
+  });
 
   function sellingProductNameInput(e: InputEvent) {
     const { value } = e.target as HTMLInputElement;
@@ -73,6 +74,7 @@ export default function NewSaleSessionForm(props: {
       setNewSaleSession("sellingProductForm", initialSellingProductForm);
       setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
       props.setShowNewSession(false);
+
       return;
     }
 
@@ -91,6 +93,14 @@ export default function NewSaleSessionForm(props: {
     return;
   }
 
+  function submitSale(e: SubmitEvent) {
+    e.preventDefault();
+
+    setNewSaleSession("sellingProductForm", initialSellingProductForm);
+    setNewSaleSession("additionalSaleDetails", intialAdditionalSaleDetails);
+    setNewSaleSession("sellingProducts", []);
+  }
+
   return (
     <form onsubmit={submitSale} aria-label="new sale form">
       <label for="product-name">Select product</label>
@@ -103,8 +113,9 @@ export default function NewSaleSessionForm(props: {
         oninput={sellingProductNameInput}
         data-testid="product-name-input"
       />
+
       <datalist id="product-list">
-        <For each={productsOnStock}>
+        <For each={getAllProductsOnStock()}>
           {(productOnStock) => (
             <option
               value={`${productOnStock.name}, ${productOnStock.serial}`}
