@@ -18,8 +18,8 @@
   height: 48px;
 }
 
-@media screen and (width > 500px) {
-  #menu {
+@media screen and (width > 800px) {
+  #menu-button {
     display: none;
   }
 }

@@ -5,7 +5,7 @@ const SalesAndService = lazy(
   () => import("../pages/sales-and-service/SalesAndService")
 );
 
-const Sales = lazy(() => import("../pages/sales/Sales"));
+import Sales from "../pages/sales/Sales";
 const Service = lazy(() => import("../pages/service/Service"));
 const ManageStore = lazy(() => import("../pages/ManageStore"));
 const History = lazy(() => import("../pages/History"));

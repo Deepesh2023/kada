@@ -17,7 +17,7 @@ a {
   color: inherit;
 }
 
-@media screen and (width > 500px) {
+@media screen and (width > 800px) {
   .container {
     display: grid;
     grid-template-columns: 1fr 4fr;
