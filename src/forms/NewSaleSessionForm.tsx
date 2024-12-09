@@ -265,5 +265,5 @@ function ProductsOnStockDatalist(props: {
 }
 
 function LoadingSpinner() {
-  return <option>Loaing</option>;
+  return <option>Loaing...</option>;
 }
