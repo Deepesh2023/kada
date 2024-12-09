@@ -1,4 +1,11 @@
-import { onMount, For, useContext, createEffect } from "solid-js";
+import {
+  For,
+  useContext,
+  createEffect,
+  Suspense,
+  createResource,
+  Resource,
+} from "solid-js";
 
 import { NewSaleSessionStoreContext } from "../types";
 import { getAllProductsOnStock } from "../services/kadaServices";
@@ -21,16 +28,15 @@ export default function NewSaleSessionForm(props: {
     StoreContext
   ) as NewSaleSessionStoreContext;
 
-  let productsOnStock: ProductOnStock[] = [];
-  onMount(async () => {
-    productsOnStock = getAllProductsOnStock();
+  const [productsOnStock] = createResource(getAllProductsOnStock, {
+    initialValue: [],
   });
 
   const disableAddSellingProductButton = () =>
     newSaleSession.sellingProductForm.name.length === 0 ? true : false;
 
   createEffect(() => {
-    const product = productsOnStock.find(
+    const product = productsOnStock().find(
       (productOnStock) =>
         productOnStock.serial === newSaleSession.sellingProductForm.serial
     );
@@ -114,15 +120,7 @@ export default function NewSaleSessionForm(props: {
         data-testid="product-name-input"
       />
 
-      <datalist id="product-list">
-        <For each={getAllProductsOnStock()}>
-          {(productOnStock) => (
-            <option
-              value={`${productOnStock.name}, ${productOnStock.serial}`}
-            ></option>
-          )}
-        </For>
-      </datalist>
+      <ProductsOnStockDatalist productsOnStock={productsOnStock} />
 
       <label for="product-quantity">Quantity</label>
       <input
@@ -230,4 +228,26 @@ export default function NewSaleSessionForm(props: {
       </div>
     </form>
   );
+}
+
+function ProductsOnStockDatalist(props: {
+  productsOnStock: Resource<ProductOnStock[]>;
+}) {
+  return (
+    <datalist id="product-list">
+      <Suspense fallback={<LoadingSpinner />}>
+        <For each={props.productsOnStock()}>
+          {(productOnStock) => (
+            <option
+              value={`${productOnStock.name}, ${productOnStock.serial}`}
+            ></option>
+          )}
+        </For>
+      </Suspense>
+    </datalist>
+  );
+}
+
+function LoadingSpinner() {
+  return <option>Loaing</option>;
 }

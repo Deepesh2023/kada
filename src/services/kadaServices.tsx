@@ -23,6 +23,10 @@ const productsOnStock: ProductOnStock[] = [
   },
 ];
 
-export function getAllProductsOnStock(): ProductOnStock[] {
-  return productsOnStock;
+export async function getAllProductsOnStock(): Promise<ProductOnStock[]> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(productsOnStock);
+    }, 5000);
+  });
 }
