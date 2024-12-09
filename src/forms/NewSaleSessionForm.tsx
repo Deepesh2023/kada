@@ -5,6 +5,7 @@ import {
   Suspense,
   createResource,
   Resource,
+  Show,
 } from "solid-js";
 
 import { NewSaleSessionStoreContext } from "../types";
@@ -43,6 +44,17 @@ export default function NewSaleSessionForm(props: {
 
     setNewSaleSession("sellingProductForm", "price", product ? product.mrp : 0);
   });
+
+  const isLowOnStock = () => {
+    const product = productsOnStock().find(
+      (productOnStock) =>
+        productOnStock.serial === newSaleSession.sellingProductForm.serial
+    );
+
+    if (product) {
+      return product.stocks < newSaleSession.sellingProductForm.quantity;
+    }
+  };
 
   function sellingProductNameInput(e: InputEvent) {
     const { value } = e.target as HTMLInputElement;
@@ -158,6 +170,10 @@ export default function NewSaleSessionForm(props: {
         min={0}
         data-testid="product-price-input"
       />
+
+      <Show when={isLowOnStock()}>
+        <p>Low on stock</p>
+      </Show>
 
       <button
         type="button"
