@@ -1,6 +1,6 @@
 import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import { describe, test, expect, vi, afterAll, afterEach } from "vitest";
+import { describe, test, expect, vi, afterAll } from "vitest";
 
 import "@testing-library/jest-dom/vitest";
 
