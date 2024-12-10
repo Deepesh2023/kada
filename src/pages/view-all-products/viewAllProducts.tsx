@@ -5,24 +5,26 @@ import {
   For,
   Suspense,
 } from "solid-js";
+
 import { getAllProductsOnStock } from "../../services/kadaServices";
 import { ProductOnStock } from "../../types";
 
 export default function ViewAllProducts() {
   const [searchText, setSearchText] = createSignal("");
-  const [productsOnDisplay, setProductsOnDisplay] = createSignal<
+  const [productsToDisplay, setProductsToDisplay] = createSignal<
     ProductOnStock[]
   >([]);
 
-  const [products] = createResource(getAllProductsOnStock, {
+  const [productsOnStorage] = createResource(getAllProductsOnStock, {
     initialValue: [],
   });
 
-  setProductsOnDisplay(products());
+  const products = () =>
+    productsToDisplay().length > 0 ? productsToDisplay() : productsOnStorage();
 
   createEffect(() => {
-    setProductsOnDisplay(
-      products().filter((product) =>
+    setProductsToDisplay(
+      productsOnStorage().filter((product) =>
         product.name.toLowerCase().includes(searchText().toLowerCase())
       )
     );
@@ -51,13 +53,7 @@ export default function ViewAllProducts() {
           </tr>
 
           <Suspense fallback={<LoadingRows />}>
-            <For
-              each={
-                productsOnDisplay().length > 0
-                  ? productsOnDisplay()
-                  : products()
-              }
-            >
+            <For each={products()}>
               {(product, index) => (
                 <tr>
                   <td>{index() + 1}</td>
