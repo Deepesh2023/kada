@@ -1,11 +1,31 @@
-import { createResource, createSignal, For, Suspense } from "solid-js";
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  For,
+  Suspense,
+} from "solid-js";
 import { getAllProductsOnStock } from "../../services/kadaServices";
+import { ProductOnStock } from "../../types";
 
 export default function ViewAllProducts() {
   const [searchText, setSearchText] = createSignal("");
+  const [productsOnDisplay, setProductsOnDisplay] = createSignal<
+    ProductOnStock[]
+  >([]);
 
   const [products] = createResource(getAllProductsOnStock, {
     initialValue: [],
+  });
+
+  setProductsOnDisplay(products());
+
+  createEffect(() => {
+    setProductsOnDisplay(
+      products().filter((product) =>
+        product.name.toLowerCase().includes(searchText().toLowerCase())
+      )
+    );
   });
 
   return (
@@ -31,17 +51,20 @@ export default function ViewAllProducts() {
           </tr>
 
           <Suspense fallback={<LoadingRows />}>
-            <For each={products()}>
+            <For
+              each={
+                productsOnDisplay().length > 0
+                  ? productsOnDisplay()
+                  : products()
+              }
+            >
               {(product, index) => (
                 <tr>
-                  <td>{index()}</td>
+                  <td>{index() + 1}</td>
                   <td>{product.serial}</td>
                   <td>{product.name}</td>
                   <td>{product.mrp}</td>
                   <td>{product.stocks}</td>
-                  <td>
-                    <button>Delete</button>
-                  </td>
                 </tr>
               )}
             </For>
