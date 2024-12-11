@@ -28,11 +28,16 @@ export default function ProductForm() {
     return false;
   }
 
+  function addProduct(e: SubmitEvent) {
+    e.preventDefault();
+    setNewProductForm(initialNewProductForm);
+  }
+
   return (
     <>
       <h2>Product form</h2>
 
-      <form action="">
+      <form onsubmit={addProduct}>
         <label for="product-name">Product name: </label>
         <input
           type="text"
