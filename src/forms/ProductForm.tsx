@@ -1,5 +1,6 @@
 import { createStore } from "solid-js/store";
 import { ProductOnStock } from "../types";
+import { createUniqueId } from "solid-js";
 
 const initialNewProductForm: ProductOnStock = {
   serial: "",
@@ -13,6 +14,20 @@ export default function ProductForm() {
     ...initialNewProductForm,
   });
 
+  function generateSerial() {
+    // yet to implemented
+
+    if (isSerialRepeated()) {
+      return;
+    }
+
+    setNewProductForm("serial", createUniqueId());
+  }
+
+  function isSerialRepeated() {
+    return false;
+  }
+
   return (
     <>
       <h2>Product form</h2>
@@ -24,6 +39,7 @@ export default function ProductForm() {
           id="product-name"
           value={newProductForm.name}
           onchange={(e) => setNewProductForm("name", e.target.value)}
+          required
         />
 
         <label for="serial">Serial</label>
@@ -32,8 +48,11 @@ export default function ProductForm() {
           id="serial"
           value={newProductForm.serial}
           onchange={(e) => setNewProductForm("serial", e.target.value)}
+          required
         />
-        <button type="button">Generate serial</button>
+        <button type="button" onclick={generateSerial}>
+          Generate serial
+        </button>
 
         <label for="stocks">Stocks</label>
         <input
@@ -41,6 +60,8 @@ export default function ProductForm() {
           id="stocks"
           value={newProductForm.stocks}
           onchange={(e) => setNewProductForm("stocks", Number(e.target.value))}
+          min={1}
+          required
         />
 
         <label for="mrp">MRP</label>
@@ -49,11 +70,12 @@ export default function ProductForm() {
           id="mrp"
           value={newProductForm.mrp}
           onchange={(e) => setNewProductForm("mrp", Number(e.target.value))}
+          required
         />
 
         <h3>Photos</h3>
 
-        <button>Add</button>
+        <button type="submit">Add</button>
       </form>
     </>
   );
