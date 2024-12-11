@@ -9,6 +9,9 @@ export default function ManageStore() {
         <li>
           <A href="view-all-products">View all products</A>
         </li>
+        <li>
+          <A href="add-new-product">Add new product</A>
+        </li>
       </ul>
     </>
   );
