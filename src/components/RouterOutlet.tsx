@@ -7,6 +7,7 @@ const SalesAndService = lazy(
 
 import Sales from "../pages/sales/Sales";
 import ViewAllProducts from "../pages/view-all-products/viewAllProducts";
+import ProductForm from "../forms/ProductForm";
 const Service = lazy(() => import("../pages/service/Service"));
 const ManageStore = lazy(() => import("../pages/manage-store/ManageStore"));
 const History = lazy(() => import("../pages/History"));
@@ -30,6 +31,7 @@ export default function RouterOutlet() {
       <Route path={"/manage-store"}>
         <Route path={"/"} component={ManageStore} />
         <Route path={"view-all-products"} component={ViewAllProducts} />
+        <Route path={"add-new-product"} component={ProductForm} />
       </Route>
 
       <Route path={"/history"} component={History} />
